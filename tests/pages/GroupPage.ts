@@ -1,6 +1,6 @@
 import { Page, Locator } from '@playwright/test';
 
-export class WorkGroupsPage {
+export class GroupPage {
   readonly page: Page;
   
   // Navigation
@@ -9,6 +9,7 @@ export class WorkGroupsPage {
   
   // Form heading
   readonly createWorkingGroupHeading: Locator;
+  readonly createTaskForceHeading: Locator;
   
   // Form fields
   readonly nameField: Locator;
@@ -19,7 +20,7 @@ export class WorkGroupsPage {
   readonly comboboxViceChair: Locator;
   readonly comboboxSecretariat: Locator;
 
-  // Error messages
+  // Required Error messages
   readonly nameRequiredError: Locator;
   readonly descriptionRequiredError: Locator;
   readonly codeRequiredError: Locator;
@@ -28,10 +29,17 @@ export class WorkGroupsPage {
   // Buttons
   readonly saveButton: Locator;
   readonly confirmButton: Locator;
+  readonly cancelButton: Locator;
   
   // Confirmation dialog
   readonly confirmationHeading: Locator;
   readonly confirmationMessage: Locator;
+
+  // Error messages for invalid data
+  readonly nameInvalidError: Locator;
+  readonly descriptionInvalidError: Locator;
+  readonly codeInvalidError: Locator  ;
+  readonly siteNameInvalidError: Locator; 
   
 
   constructor(page: Page) {
@@ -43,6 +51,7 @@ export class WorkGroupsPage {
     
     // Form heading
     this.createWorkingGroupHeading = page.getByRole('heading', { name: 'Create Working Group' });
+    this.createTaskForceHeading = page.getByRole('heading', { name: 'Create Task Force' });
     
     // Form fields
     this.nameField = page.getByRole('textbox', { name: 'Name *', exact: true });
@@ -56,7 +65,7 @@ export class WorkGroupsPage {
     this.comboboxSecretariat = page.locator(`//label[normalize-space()="Secretariat"]/following::input[@role="combobox"][1]`);
 
     
-    // Error messages
+    // Required Error messages
     this.nameRequiredError = page.getByText('Name is required.', { exact: true });
     this.descriptionRequiredError = page.getByText('Description is required.');
     this.codeRequiredError = page.getByText('Code is required.');
@@ -65,10 +74,17 @@ export class WorkGroupsPage {
     // Buttons
     this.saveButton = page.getByRole('button', { name: 'Save' });
     this.confirmButton = page.getByRole('button', { name: 'Confirm' });
+    this.cancelButton = page.getByRole('button', { name: 'Cancel' });
     
     // Confirmation dialog
     this.confirmationHeading = page.getByRole('heading', { name: 'Confirmation' });
     this.confirmationMessage = page.getByText('Are you sure you want to');
+
+    // Error messages for invalid data
+    this.nameInvalidError = page.getByText('Name must contain alphanumeric characters, spaces, or hyphens only.');
+    this.descriptionInvalidError = page.getByText('Description must contain valid characters (alphanumeric, spaces, and common punctuation).');
+    this.codeInvalidError = page.getByText('Code must contain alphanumeric characters or hyphens only.');
+    this.siteNameInvalidError = page.getByText('Site Name must contain alphanumeric characters or hyphens only.');
 
   }
 }
