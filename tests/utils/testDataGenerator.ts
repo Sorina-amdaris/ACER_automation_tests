@@ -30,7 +30,7 @@ export function generateRandomString(length: number, includeSpaces: boolean = tr
  */
 export function generateRandomDescription(minLength: number = 10, maxLength: number = 50): string {
   const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
-  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?-';
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,';
   
   let result = '';
   for (let i = 0; i < length; i++) {

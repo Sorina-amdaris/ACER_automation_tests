@@ -15,7 +15,10 @@ export class WorkGroupsPage {
   readonly descriptionField: Locator;
   readonly codeField: Locator;
   readonly siteNameField: Locator;
-  
+  readonly comboboxChair: Locator;
+  readonly comboboxViceChair: Locator;
+  readonly comboboxSecretariat: Locator;
+
   // Error messages
   readonly nameRequiredError: Locator;
   readonly descriptionRequiredError: Locator;
@@ -46,6 +49,12 @@ export class WorkGroupsPage {
     this.descriptionField = page.getByRole('textbox', { name: 'Description *' });
     this.codeField = page.getByRole('textbox', { name: 'Code *' });
     this.siteNameField = page.getByRole('textbox', { name: 'Site Name *' });
+
+    
+    this.comboboxChair = page.locator(`//label[normalize-space()="Chair(s)"]/following::input[@role="combobox"][1]`);
+    this.comboboxViceChair = page.locator(`//label[normalize-space()="Vice-Chair(s)"]/following::input[@role="combobox"][1]`);
+    this.comboboxSecretariat = page.locator(`//label[normalize-space()="Secretariat"]/following::input[@role="combobox"][1]`);
+
     
     // Error messages
     this.nameRequiredError = page.getByText('Name is required.', { exact: true });

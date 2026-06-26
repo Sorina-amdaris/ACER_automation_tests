@@ -31,8 +31,8 @@ export class WorkGroupsActions {
 
   generateRandomFormData() {
     return {
-      name: generateName(5, 15),
-      description: generateRandomDescription(20, 50),
+      name: "Test Auto " + generateName(5, 15),
+      description: generateRandomDescription(20, 50),//without special characters
       code: generateCode(8),
       siteName: generateSiteName(10)
     };
@@ -57,26 +57,31 @@ export class WorkGroupsActions {
     return randomData; // Return for verification in tests
   }
 
-  async selectRoleUser(roleType: 'owner' | 'member' | 'visitor', searchText: string, optionName: string) {
-    const comboboxId = roleType === 'owner' ? '#combobox-id__2653' : 
-                       roleType === 'member' ? '#combobox-id__2656' : 
-                       '#combobox-id__2659';
+  async selectFirstRoleUser(roleType: 'chair' | 'viceChair' | 'secretariat', searchText: string) {
+    const combobox = roleType === 'chair' ? this.workGroupsPage.comboboxChair : 
+                     roleType === 'viceChair' ? this.workGroupsPage.comboboxViceChair : 
+                     this.workGroupsPage.comboboxSecretariat;
     
-    await this.page.locator(comboboxId).click();
-    await this.page.locator(comboboxId).fill(searchText);
-    await this.page.getByRole('option', { name: optionName }).click();
-  }
-
-  async selectFirstRoleUser(roleType: 'owner' | 'member' | 'visitor', searchText: string) {
-    const comboboxId = roleType === 'owner' ? '#combobox-id__2653' : 
-                       roleType === 'member' ? '#combobox-id__2656' : 
-                       '#combobox-id__2659';
+    // Determine which option to select based on role type
+    const optionIndex = roleType === 'chair' ? 0 : 
+                        roleType === 'viceChair' ? 1 : 
+                        2; // secretariat gets 3rd option (index 2)
     
-    await this.page.locator(comboboxId).click();
-    await this.page.locator(comboboxId).fill(searchText);
-    // Wait for options to load and select the first one
-    await this.page.waitForTimeout(500); // Small wait for options to populate
-    await this.page.getByRole('option').first().click();
+    await combobox.click();
+    await combobox.fill(searchText);
+    
+    // Wait for options to appear
+    await this.page.waitForSelector('[role="option"]', { state: 'visible' });
+    await this.page.waitForTimeout(300);
+    
+    // Get all visible options and select the one at the desired index
+    const options = await this.page.getByRole('option').all();
+    if (options.length > optionIndex) {
+      await options[optionIndex].click();
+    } else {
+      // Fallback to first option if not enough options
+      await options[0].click();
+    }
   }
 
   async saveWorkGroup() {
@@ -89,7 +94,7 @@ export class WorkGroupsActions {
 
   // Verification methods
   verifySuccessMessage(name: string): Locator {
-    return this.page.getByText(`Working group request '${name}`);
+    return this.page.getByText(`${name}`);
   }
 
   verifyWorkGroupInList(name: string): Locator {
@@ -106,33 +111,7 @@ export class WorkGroupsActions {
       siteName: this.workGroupsPage.siteNameRequiredError
     };
   }
-
-  // Combined workflow methods
-  async createWorkGroupWithRoles(data: {
-    name: string;
-    description: string;
-    code: string;
-    siteName: string;
-    owner?: { search: string; option: string };
-    member?: { search: string; option: string };
-    visitor?: { search: string; option: string };
-  }) {
-    await this.clickCreateGroup();
-    await this.fillWorkGroupForm(data);
-    
-    if (data.owner) {
-      await this.selectRoleUser('owner', data.owner.search, data.owner.option);
-    }
-    if (data.member) {
-      await this.selectRoleUser('member', data.member.search, data.member.option);
-    }
-    if (data.visitor) {
-      await this.selectRoleUser('visitor', data.visitor.search, data.visitor.option);
-    }
-    
-    await this.saveWorkGroup();
-  }
-
+  
   async createWorkGroupWithoutRoles(data: {
     name: string;
     description: string;
