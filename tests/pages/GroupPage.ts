@@ -6,10 +6,15 @@ export class GroupPage {
   // Navigation
   readonly groupsButton: Locator;
   readonly createGroupButton: Locator;
-  
+  readonly searchBoxAdministrationPage: Locator;
+  readonly addTaskForceButton: Locator;
+  readonly editWorkingGroupButton: Locator;
+  readonly editTaskForceButton: Locator;
   // Form heading
   readonly createWorkingGroupHeading: Locator;
   readonly createTaskForceHeading: Locator;
+  readonly editWorkingGroupHeading: Locator;
+  readonly editTaskForceHeading: Locator;
   
   // Form fields
   readonly nameField: Locator;
@@ -19,6 +24,9 @@ export class GroupPage {
   readonly comboboxChair: Locator;
   readonly comboboxViceChair: Locator;
   readonly comboboxSecretariat: Locator;
+  readonly removeChairButton: Locator;
+  readonly removeViceChairButton: Locator;
+  readonly removeButton: Locator;
 
   // Required Error messages
   readonly nameRequiredError: Locator;
@@ -48,10 +56,16 @@ export class GroupPage {
     // Navigation
     this.groupsButton = page.getByRole('button', { name: 'Groups', exact: true });
     this.createGroupButton = page.getByRole('button', { name: 'Create Group', exact: true });
+    this.searchBoxAdministrationPage = page.getByRole('searchbox', { name: 'Search' });
+    this.addTaskForceButton = page.getByRole('button', { name: 'Add Task Force' });
+    this.editWorkingGroupButton = page.getByRole('button', { name: 'Edit Working Group' });
+    this.editTaskForceButton = page.getByRole('button', { name: 'Edit Task Force' });
     
     // Form heading
     this.createWorkingGroupHeading = page.getByRole('heading', { name: 'Create Working Group' });
     this.createTaskForceHeading = page.getByRole('heading', { name: 'Create Task Force' });
+    this.editWorkingGroupHeading = page.getByRole('heading', { name: 'Edit Working Group' });
+    this.editTaskForceHeading = page.getByRole('heading', { name: 'Edit Task Force' });
     
     // Form fields
     this.nameField = page.getByRole('textbox', { name: 'Name *', exact: true });
@@ -63,7 +77,10 @@ export class GroupPage {
     this.comboboxChair = page.locator(`//label[normalize-space()="Chair(s)"]/following::input[@role="combobox"][1]`);
     this.comboboxViceChair = page.locator(`//label[normalize-space()="Vice-Chair(s)"]/following::input[@role="combobox"][1]`);
     this.comboboxSecretariat = page.locator(`//label[normalize-space()="Secretariat"]/following::input[@role="combobox"][1]`);
-
+    
+    this.removeChairButton = page.getByRole('button', { name: 'Remove TestChairJulio' });
+    this.removeViceChairButton = page.getByRole('button', { name: 'Remove TestViceChairFredrick' });
+    this.removeButton = page.getByRole('button', { name: 'Remove' });
     
     // Required Error messages
     this.nameRequiredError = page.getByText('Name is required.', { exact: true });
