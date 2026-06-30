@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { GroupPage } from '../pages/GroupPage';
 import { GroupActions } from '../actions/GroupActions';
 import manualData from '../../manual-test-data.json';
-import { time } from 'node:console';
+
 
 //RUN: npx playwright test tests/ui-functional/create-work-group-without-roles.spec.ts --headed   
 //Test data without roles
@@ -23,98 +23,6 @@ test.describe('Edit Work Group and Task Force', () => {
   // test.afterEach(async ({ context }) => {
   //   await context.close();
   // });
-
-  test('Edit WG form', async ({ page }) => {
-    test.setTimeout(10 * 60 * 1000); // 10 minutes
-    // Open groups section and create group
-    await expect(groupPage.groupsButton).toBeVisible();
-     
-    await groupActions.goToCertainGroup(manualData.workGroup);
-
-    //click on pensil icon to edit WG
-    await groupPage.editWorkingGroupButton.click();
-
-     // Verify form heading
-    await expect(groupPage.editWorkingGroupHeading).toBeVisible();
-    await groupActions.fillEditGroupForm({
-      name: manualData.editName,
-      description: manualData.editDescription
-    }
-  );
-    //fill out roles
-    await groupPage.comboboxChair.click();
-    await groupPage.comboboxChair.fill(manualData.searchWord.chairRole);
-    await page.getByRole('option', { name: manualData.selectRoleOption.chairRole }).click();
-   
-    await groupPage.comboboxViceChair.click();
-    await groupPage.comboboxViceChair.fill(manualData.searchWord.viceChairRole);
-    await page.getByRole('option', { name: manualData.selectRoleOption.viceChairRole }).click();
-
-    await groupPage.comboboxSecretariat.click();
-    await groupPage.comboboxSecretariat.fill(manualData.searchWord.secretariatRole);
-    await page.getByRole('option', { name: manualData.selectRoleOption.secretariatRole }).click();
-
-
-    //save the form and verify success message
-    await groupActions.saveGroup();
-    await expect(groupActions.verifySuccessMessage(manualData.workGroup)).toBeVisible({ timeout: 5000 }); 
-
-   // Retry mechanism to check for the work group in the list
-    await expect(async () => {
-    await page.reload();
-    
-    await groupPage.searchBoxAdministrationPage.fill(manualData.editName);
-    await groupPage.searchBoxAdministrationPage.press('Enter');
-
-    await expect(
-    groupActions.verifyGroupInList(manualData.editName)
-    ).toBeVisible();
-    }).toPass({
-    timeout: 60000,   // total retry time as 1 minute
-    intervals: [10000] // retry every 10s
-  }); 
-
- //then click on it and remove the roles and save back the previous data for WG and check confirmation pop-up
-    //click on pensil icon to edit WG
-    await groupPage.editWorkingGroupButton.click();
-
-     // Verify form heading
-    await expect(groupPage.editWorkingGroupHeading).toBeVisible();
-
-    await groupActions.fillEditGroupForm({
-      name: manualData.workGroup,
-      description: manualData.description
-    });
-   
-    await groupActions.removeRolesinEditForm();
-     // Save and handle confirmation
-    await groupActions.saveGroup();
-    await expect(groupPage.confirmationHeading).toBeVisible();
-    await expect(groupPage.confirmationMessage).toBeVisible();
-    await groupActions.confirmCreation();
-
-    await expect(groupActions.verifySuccessMessage(manualData.editName)).toBeVisible(); //shows the previous name
-    
-    
-   // Retry mechanism to check for the work group in the list
-    await expect(async () => {
-    await page.reload();
-    
-    await groupPage.searchBoxAdministrationPage.fill(manualData.editName);
-    await groupPage.searchBoxAdministrationPage.press('Enter');
-
-    await expect(
-    groupActions.verifyGroupInList(manualData.editName)
-    ).toBeVisible();
-    }).toPass({
-    timeout: 60000,   // total retry time as 1 minute
-    intervals: [10000] // retry every 10s
-  }); 
-    
- //**********   steps to check the fields edited?
-    
-
-   });  
 
 test('Edit TF form', async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
@@ -204,8 +112,49 @@ test('Edit TF form', async ({ page }) => {
   }); 
     
  //**********   steps to check the fields edited?
+   }); 
+   
+   test('Check TF Edit - required fields', async ({ page }) => {
+    // Open groups section and create group
+    await expect(groupPage.groupsButton).toBeVisible();
     
+    await groupActions.goToCertainGroup(manualData.taskForce);
 
-   });  
+    //click on pensil icon to edit TF
+    await groupPage.editTaskForceButton.click();
+  
+    // Verify form heading
+    await expect(groupPage.editTaskForceHeading).toBeVisible();
+    
+    // Test validation - try to save without filling required fields
+    const errors = await groupActions.verifyEditRequiredFieldErrors();
+    await expect(errors.name).toBeVisible();
+    await expect(errors.description).toBeVisible();
+
+    //click cancel button to close the form
+    await groupActions.cancelForm();
+
+  });
+
+    test('Check TF Edit - invalid data', async ({ page }) => {
+ // Open groups section and create group
+    await expect(groupPage.groupsButton).toBeVisible();
+    
+    await groupActions.goToCertainGroup(manualData.taskForce);
+    //click on pensil icon to edit TF
+    await groupPage.editTaskForceButton.click();
+  
+    // Verify form heading
+    await expect(groupPage.editTaskForceHeading).toBeVisible();
+
+    await groupActions.insertInvalidDataInEditGroupForm();
+    const invalidErrors = await groupActions.verifyEditInvalidFieldErrors();
+    await expect(invalidErrors.name).toBeVisible();
+    await expect(invalidErrors.description).toBeVisible();
+
+    //click cancel button to close the form
+    await groupActions.cancelForm();
+
+  });
 
    });

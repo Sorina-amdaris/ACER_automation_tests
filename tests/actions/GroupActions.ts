@@ -126,7 +126,7 @@ export class GroupActions {
     return this.page.getByText(name);
   }
 
-  // Validation methods
+  // Validation methods create form
   async verifyRequiredFieldErrors() {
     await this.groupPage.saveButton.click();
     return {
@@ -137,7 +137,18 @@ export class GroupActions {
     };
   }
 
-//validation for invalid data
+  // Validation methods edit form
+  async verifyEditRequiredFieldErrors() {
+     await this.groupPage.nameField.clear();
+     await this.groupPage.descriptionField.clear();
+     await this.groupPage.saveButton.click();
+    return {
+      name: this.groupPage.nameRequiredError,
+      description: this.groupPage.descriptionRequiredError,
+    };
+  }
+
+//validation for invalid data create form
   async verifyInvalidFieldErrors() {
     await this.groupPage.saveButton.click();
     return {
@@ -145,6 +156,15 @@ export class GroupActions {
       description: this.groupPage.descriptionInvalidError,
       code: this.groupPage.codeInvalidError,
       siteName: this.groupPage.siteNameInvalidError
+    };
+  }
+
+  //validation for invalid data edit form
+  async verifyEditInvalidFieldErrors() {
+    await this.groupPage.saveButton.click();
+    return {
+      name: this.groupPage.nameInvalidError,
+      description: this.groupPage.descriptionInvalidError,
     };
   }
 
@@ -169,6 +189,11 @@ export class GroupActions {
     await this.groupPage.descriptionField.fill('_?^^');
     await this.groupPage.codeField.fill('$# &');
     await this.groupPage.siteNameField.fill('test string');
+  }
+
+    async insertInvalidDataInEditGroupForm() {
+    await this.groupPage.nameField.fill('$% string');
+    await this.groupPage.descriptionField.fill('_?^^');
   }
  
   async cancelForm() {
