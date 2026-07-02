@@ -1,9 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { GroupPage } from '../pages/GroupPage';
 import { GroupActions } from '../actions/GroupActions';
-import { saveWorkGroupName } from '../utils/testData';
 import manualData from '../../manual-test-data.json';
-import { time } from 'node:console';
+import { FileSaver } from '../utils/fileSaver';
 
 //RUN: npx playwright test tests/ui-functional/create-work-group-without-roles.spec.ts --headed   
 
@@ -17,7 +16,7 @@ test.describe('Work Group Management creation', () => {
   test.beforeEach(async ({ page }) => {
     groupPage = new GroupPage(page);
     groupActions = new GroupActions(page);
-    await groupActions.goto();
+    await groupActions.goto(manualData.url.administration);
   });
 
   // test.afterEach(async ({ context }) => {
@@ -39,23 +38,31 @@ test.describe('Work Group Management creation', () => {
     const randomData = await groupActions.fillGroupFormWithRandomData();
     console.log('Created work group with roles:', WGrandomName,randomData);
 
-    await groupPage.comboboxChair.click();
-    await groupPage.comboboxChair.fill(manualData.searchWord.chairRole);
-    await page.getByRole('option', { name: manualData.selectRoleOption.chairRole }).click();
-   
-    await groupPage.comboboxViceChair.click();
-    await groupPage.comboboxViceChair.fill(manualData.searchWord.viceChairRole);
-    await page.getByRole('option', { name: manualData.selectRoleOption.viceChairRole }).click();
+     //fill out roles
+    await groupActions.selectPerson(
+      groupPage.comboboxChair,
+      manualData.searchWord.chairRole,
+      manualData.selectRoleOption.chairRole
+    );
 
-    await groupPage.comboboxSecretariat.click();
-    await groupPage.comboboxSecretariat.fill(manualData.searchWord.secretariatRole);
-    await page.getByRole('option', { name: manualData.selectRoleOption.secretariatRole }).click();
+    await groupActions.selectPerson(
+      groupPage.comboboxViceChair,
+      manualData.searchWord.viceChairRole,
+      manualData.selectRoleOption.viceChairRole
+    );
+
+    await groupActions.selectPerson(
+      groupPage.comboboxSecretariat,  
+      manualData.searchWord.secretariatRole,
+      manualData.selectRoleOption.secretariatRole
+    );
    
     // Save and verify success
     await groupActions.saveGroup();
-    await expect(groupActions.verifySuccessMessage(WGrandomName.name)).toBeVisible({ timeout: 5000 });
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 5000 });
     
-   // saveWorkGroupName(WGrandomName.name); //not sure need it
+    //save the site for later verification
+    await FileSaver.saveSiteData(randomData.siteName, 'created-work-groups_withRoles.json');
     
     // Retry mechanism to check for the work group in the list
     await expect(async () => {
@@ -135,11 +142,10 @@ test.describe('Work Group Management creation', () => {
     await expect(groupPage.confirmationMessage).toBeVisible();
     await groupActions.confirmCreation();
     
-   await expect(groupActions.verifySuccessMessage(WGrandomName.name)).toBeVisible({ timeout: 5000 });
-    
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 5000 });
+    //save the site for later verification
+    await FileSaver.saveSiteData(randomData.siteName, 'created-work-groups_withoutRoles.json');
 
-    // saveWorkGroupName(WGrandomName.name); //not sure need it
-    
     // Retry mechanism to check for the work group in the list
     await expect(async () => {
     await page.reload();

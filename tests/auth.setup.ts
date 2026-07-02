@@ -1,32 +1,32 @@
-// import { test as setup, expect } from '@playwright/test';
-// import manualData from '../manual-test-data.json';
+import { test as setup, expect } from '@playwright/test';
+import manualData from '../manual-test-data.json';
 
-// //RUN: npx playwright test tests/auth.setup.ts --headed
+//RUN: npx playwright test tests/auth.setup.ts --headed
 
-// const authFile = '.auth/user.json';
+const authFile = '.auth/user.json';
 
-// setup('authenticate with 2FA', async ({ page }) => {
-//   // Navigate to SharePoint login
-//   await page.goto(manualData.url.extranetHub);
+setup.skip('authenticate with 2FA', async ({ page }) => {
+  // Navigate to SharePoint login
+  await page.goto(manualData.url.extranetHub);
   
-//   // Fill in username
-//   await page.getByPlaceholder('Email, phone, or Skype').fill(manualData.adminUser_Authentication.username);
-//   await page.getByRole('button', { name: 'Next' }).click();
+  // Fill in username
+  await page.getByPlaceholder('Email, phone, or Skype').fill(manualData.adminUser_Authentication.username);
+  await page.getByRole('button', { name: 'Next' }).click();
   
-//   // Fill in password
-//   await page.getByPlaceholder('Password').fill(manualData.adminUser_Authentication.password);
-//   await page.getByRole('button', { name: 'Sign in' }).click();
+  // Fill in password
+  await page.getByPlaceholder('Password').fill(manualData.adminUser_Authentication.password);
+  await page.getByRole('button', { name: 'Sign in' }).click();
   
-//   // Handle 2FA - Wait for manual 2FA verification
-//   // Note: You may need to manually approve the 2FA request during test setup
-//   console.log('Please complete 2FA authentication...');
+  // Handle 2FA - Wait for manual 2FA verification
+  // Note: You may need to manually approve the 2FA request during test setup
+  console.log('Please complete 2FA authentication...');
   
-//   // Wait for navigation to complete after 2FA (5 minutes)
-//   await page.waitForURL('**/ExtranetHub*', { timeout: 300000 });
+  // Wait for navigation to complete after 2FA (5 minutes)
+  await page.waitForURL('**/ExtranetHub*', { timeout: 300000 });
   
-//   // Wait for page to be loaded (SharePoint has continuous background activity, so don't wait for networkidle)
-//   await page.waitForLoadState('load');
+  // Wait for page to be loaded (SharePoint has continuous background activity, so don't wait for networkidle)
+  await page.waitForLoadState('load');
   
-//   // Save authentication state
-//   await page.context().storageState({ path: authFile });
-// });
+  // Save authentication state
+  await page.context().storageState({ path: authFile });
+});

@@ -5,6 +5,8 @@ export class GroupPage {
   
   // Navigation
   readonly groupsButton: Locator;
+  readonly addMemberButton: Locator;
+  readonly addMemberSecondbtn: Locator;
   readonly createGroupButton: Locator;
   readonly searchBoxAdministrationPage: Locator;
   readonly addTaskForceButton: Locator;
@@ -15,6 +17,7 @@ export class GroupPage {
   readonly createTaskForceHeading: Locator;
   readonly editWorkingGroupHeading: Locator;
   readonly editTaskForceHeading: Locator;
+  readonly addMemberHeading: Locator;
   
   // Form fields
   readonly nameField: Locator;
@@ -27,6 +30,10 @@ export class GroupPage {
   readonly removeChairButton: Locator;
   readonly removeViceChairButton: Locator;
   readonly removeButton: Locator;
+  readonly personTag: Locator;
+  readonly comboboxAddMember: Locator;
+  readonly roleFieldAddMemberForm: Locator;
+  readonly optionRoleToSelectInAddMembersForm: (option: string) => Locator;
 
   // Required Error messages
   readonly nameRequiredError: Locator;
@@ -38,6 +45,7 @@ export class GroupPage {
   readonly saveButton: Locator;
   readonly confirmButton: Locator;
   readonly cancelButton: Locator;
+  readonly addMemberSaveButton: Locator;
   
   // Confirmation dialog
   readonly confirmationHeading: Locator;
@@ -48,13 +56,29 @@ export class GroupPage {
   readonly descriptionInvalidError: Locator;
   readonly codeInvalidError: Locator  ;
   readonly siteNameInvalidError: Locator; 
-  
+
+  //notification message
+  readonly successMessage: Locator;
+
+  //Group page
+  readonly keyPeopleSection: Locator;
+  readonly viceChairMemberinGroupPage: Locator;
+  readonly chairMemberinGroupPage: Locator;
+  readonly acerContactMemberinGroupPage: Locator;
+  readonly membersSection: Locator;
+  readonly membersCheckboxes: Locator;
+  readonly cardView: Locator;
+  readonly secretariatCard: Locator;
+  readonly editFormMember: Locator;
+
 
   constructor(page: Page) {
     this.page = page;
     
     // Navigation
     this.groupsButton = page.getByRole('button', { name: 'Groups', exact: true });
+    this.addMemberButton =page.getByRole('button', { name: 'Add', exact: true });
+    this.addMemberSecondbtn = page.getByRole('button', { name: 'Add', exact: true }).and(page.locator(':not([disabled])'));
     this.createGroupButton = page.getByRole('button', { name: 'Create Group', exact: true });
     this.searchBoxAdministrationPage = page.getByRole('searchbox', { name: 'Search' });
     this.addTaskForceButton = page.getByRole('button', { name: 'Add Task Force' });
@@ -66,18 +90,23 @@ export class GroupPage {
     this.createTaskForceHeading = page.getByRole('heading', { name: 'Create Task Force' });
     this.editWorkingGroupHeading = page.getByRole('heading', { name: 'Edit Working Group' });
     this.editTaskForceHeading = page.getByRole('heading', { name: 'Edit Task Force' });
+    this.addMemberHeading = page.getByRole('heading', { name: 'Add Member' });
     
     // Form fields
-    this.nameField = page.getByRole('textbox', { name: 'Name *', exact: true });
-    this.descriptionField = page.getByRole('textbox', { name: 'Description *' });
-    this.codeField = page.getByRole('textbox', { name: 'Code *' });
-    this.siteNameField = page.getByRole('textbox', { name: 'Site Name *' });
+    this.nameField = page.getByRole('textbox', { name: 'Name *',exact:true});
+    this.descriptionField = page.getByRole('textbox', { name: 'Description *',exact:true});
+    this.codeField = page.getByRole('textbox', { name: 'Code *',exact:true });
+    this.siteNameField = page.getByRole('textbox', { name: 'Site Name *',exact:true });
 
     
     this.comboboxChair = page.locator(`//label[normalize-space()="Chair(s)"]/following::input[@role="combobox"][1]`);
     this.comboboxViceChair = page.locator(`//label[normalize-space()="Vice-Chair(s)"]/following::input[@role="combobox"][1]`);
     this.comboboxSecretariat = page.locator(`//label[normalize-space()="Secretariat"]/following::input[@role="combobox"][1]`);
-    
+    this.personTag = page.locator('.ms-Persona-primaryText');
+    this.comboboxAddMember = page.getByRole('combobox', { name: 'People Picker' });
+    this.roleFieldAddMemberForm = page.getByRole('combobox').filter({has: page.locator('span', { hasText: 'Chair' })});
+    this.optionRoleToSelectInAddMembersForm = (option: string) => page.getByRole('option', { name: option });
+
     this.removeChairButton = page.getByRole('button', { name: 'Remove TestChairJulio' });
     this.removeViceChairButton = page.getByRole('button', { name: 'Remove TestViceChairFredrick' });
     this.removeButton = page.getByRole('button', { name: 'Remove' });
@@ -92,6 +121,7 @@ export class GroupPage {
     this.saveButton = page.getByRole('button', { name: 'Save' });
     this.confirmButton = page.getByRole('button', { name: 'Confirm' });
     this.cancelButton = page.getByRole('button', { name: 'Cancel' });
+    this.addMemberSaveButton = page.getByLabel('Add Member').getByRole('button', { name: 'Add' });
     
     // Confirmation dialog
     this.confirmationHeading = page.getByRole('heading', { name: 'Confirmation' });
@@ -102,6 +132,19 @@ export class GroupPage {
     this.descriptionInvalidError = page.getByText('Description must contain valid characters (alphanumeric, spaces, and common punctuation).');
     this.codeInvalidError = page.getByText('Code must contain alphanumeric characters or hyphens only.');
     this.siteNameInvalidError = page.getByText('Site Name must contain alphanumeric characters or hyphens only.');
+   
+    //notification message
+    this.successMessage = page.getByText(/successfully/i);
 
+    //Group page
+    this.keyPeopleSection = page.getByText('Key People', { exact: true })
+    this.viceChairMemberinGroupPage =page.getByText('Vice-ChairVice-Chair');
+    this.chairMemberinGroupPage =page.getByText('ChairChair');
+    this.acerContactMemberinGroupPage = page.getByText('ACER ContactACER Contact');
+    this.membersSection = page.getByText('Members', { exact: true })
+    this.membersCheckboxes =  page.getByRole('checkbox');
+    this.cardView = page.getByRole('button', { name: 'Cards' });
+    this.secretariatCard = page.getByRole('button', { name: 'TestSecretariatBradford' });
+    this.editFormMember =page.getByRole('button', { name: 'Edit role' });
   }
 }

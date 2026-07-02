@@ -24,23 +24,36 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: process.env.CI 
+    ? [
+        ['html', { outputFolder: 'playwright-report', open: 'never' }],
+        ['json', { outputFile: 'test-results/results.json' }],
+        ['junit', { outputFile: 'test-results/junit.xml' }],
+        ['github'],
+      ]
+    : 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: 'https://euacerdev.sharepoint.com/sites/ExtranetHub',
+    baseURL: process.env.BASE_URL || 'https://euacerdev.sharepoint.com/sites/ExtranetHub',
     /* Slow down by 500ms (optional, remove for faster tests) */
     // launchOptions: {
     //   slowMo: 500
     // },
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: process.env.CI ? 'retain-on-failure' : 'on-first-retry',
     
     /* Take screenshots on failure */
     screenshot: 'only-on-failure',
     
     /* Record video on failure */
-    video: 'retain-on-failure',
+    video: process.env.CI ? 'retain-on-failure' : 'on-first-retry',
+    
+    /* Maximum time for each action */
+    actionTimeout: 15 * 1000, // 15 seconds
+    
+    /* Maximum time for navigation */
+    navigationTimeout: 30 * 1000, // 30 seconds
   },
 
   /* Configure projects for major browsers */
@@ -58,27 +71,30 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         // Use saved authentication state
         storageState: '.auth/user.json',
+        // Custom viewport size for laptop
+        viewport: { width: 1536, height: 864 },
       },
       dependencies: ['setup'],
     },
 
-    {
-      name: 'firefox',
-      use: { 
-        ...devices['Desktop Firefox'],
-        storageState: '.auth/user.json',
-      },
-      dependencies: ['setup'],
-    },
+    // Commented out to run only on Chromium
+    // {
+    //   name: 'firefox',
+    //   use: { 
+    //     ...devices['Desktop Firefox'],
+    //     storageState: '.auth/user.json',
+    //   },
+    //   dependencies: ['setup'],
+    // },
 
-    {
-      name: 'webkit',
-      use: { 
-        ...devices['Desktop Safari'],
-        storageState: '.auth/user.json',
-      },
-      dependencies: ['setup'],
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { 
+    //     ...devices['Desktop Safari'],
+    //     storageState: '.auth/user.json',
+    //   },
+    //   dependencies: ['setup'],
+    // },
 
     /* Test against mobile viewports. */
     // {

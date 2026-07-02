@@ -14,8 +14,8 @@ export class GroupActions {
   }
 
   // Navigation methods
-  async goto() {
-    await this.page.goto(manualData.url.administration);
+  async goto(url:string) {
+    await this.page.goto(url);
     await this.page.waitForLoadState('load');
   }
 
@@ -118,8 +118,8 @@ export class GroupActions {
   }
 
   // Verification methods
-  verifySuccessMessage(name: string): Locator {
-    return this.page.getByText(`${name}`);
+  verifySuccessMessage() {
+    return this.groupPage.successMessage;
   }
 
   verifyGroupInList(name: string): Locator {
@@ -207,4 +207,27 @@ export class GroupActions {
     await this.groupPage.removeButton.click();
   }
 
+  async selectPerson(
+  comboBox: Locator,
+  searchword: string,
+  optionName: string
+) {
+  await comboBox.fill(searchword);
+
+  const option = this.page.getByRole('option', {
+    name: optionName,
+  });
+
+  await expect(option).toBeVisible({ timeout: 10000 });
+  await option.click();
+  await expect(option).toBeHidden();
+}
+
+async selectRoleInAddMemberForm(role: string) {
+    await this.groupPage.roleFieldAddMemberForm.click();
+    await this.groupPage.optionRoleToSelectInAddMembersForm(role).click();
+    await this.groupPage.addMemberSaveButton.click();
+    await expect(this.verifySuccessMessage()).toBeVisible({ timeout: 5000 });
+ 
+}
 }
