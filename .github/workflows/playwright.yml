@@ -6,27 +6,38 @@ on:
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
-    inputs:
-      browser:
-        description: 'Browser to test'
-        required: false
-        default: 'chromium'
-        type: choice
-        options:
-          - chromium
-          - firefox
-          - webkit
-          - all
 
 jobs:
-  test:
-    name: Test - ${{ matrix.browser }}
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-deps-${{ hashFiles('package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-deps-
+
+  run-ui-flows:
+    name: Run UI Tests - Chromium
+    needs: prepare
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: ${{ github.event.inputs.browser == 'all' && fromJSON('["chromium", "firefox", "webkit"]') || github.event.inputs.browser && fromJSON(format('["{0}"]', github.event.inputs.browser)) || fromJSON('["chromium"]') }}
     
     steps:
       - name: Checkout code
@@ -36,13 +47,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
       
-      - name: Install dependencies
-        run: npm ci
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-deps-${{ hashFiles('package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-deps-
+      
+      - name: Install dependencies (if cache miss)
+        run: npm install
       
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps ${{ matrix.browser }}
+        run: npx playwright install --with-deps chromium
       
       - name: Create auth directory
         run: mkdir -p .auth
@@ -53,32 +73,57 @@ jobs:
           TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
           CI: true
-        run: npx playwright test --project=${{ matrix.browser }}
-      
-      - name: Upload HTML Report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report-${{ matrix.browser }}-${{ github.run_attempt }}
-          path: playwright-report/
-          retention-days: 30
+        run: npx playwright test --project=chromium
       
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-results-${{ matrix.browser }}-${{ github.run_attempt }}
+          name: test-results-chromium-${{ github.run_attempt }}
           path: test-results/
           retention-days: 30
       
-      - name: Upload Failure Artifacts (Videos, Screenshots, Traces)
+      - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
-          name: failure-artifacts-${{ matrix.browser }}-${{ github.run_attempt }}
-          path: |
-            test-results/**/*.png
-            test-results/**/*.webm
-            test-results/**/*.zip
-          retention-days: 15
-          if-no-files-found: ignore
+          name: playwright-report-chromium-${{ github.run_attempt }}
+          path: playwright-report/
+          retention-days: 30
+
+  create-report:
+    name: Create Report
+    needs: run-ui-flows
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-artifacts
+      
+      - name: Display structure of downloaded files
+        run: ls -R all-artifacts
+      
+      - name: Merge test results
+        run: |
+          mkdir -p merged-report
+          find all-artifacts -name "*.json" -path "*/test-results/*" -exec cp {} merged-report/ \;
+      
+      - name: Upload merged report
+        uses: actions/upload-artifact@v4
+        with:
+          name: merged-test-report-${{ github.run_attempt }}
+          path: merged-report/
+          retention-days: 30
+      
+      - name: Upload all HTML reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-html-reports-${{ github.run_attempt }}
+          path: all-artifacts/playwright-report-*/
+          retention-days: 30

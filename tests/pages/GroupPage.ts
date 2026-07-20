@@ -50,6 +50,8 @@ export class GroupPage {
   // Confirmation dialog
   readonly confirmationHeading: Locator;
   readonly confirmationMessage: Locator;
+  readonly confirmationRemoveHeading: Locator;
+  readonly confirmationMessageLastRole: Locator;
 
   // Error messages for invalid data
   readonly nameInvalidError: Locator;
@@ -57,8 +59,12 @@ export class GroupPage {
   readonly codeInvalidError: Locator  ;
   readonly siteNameInvalidError: Locator; 
 
+  //Error message for members same role
+  readonly membersSameRoleError: Locator;
+
   //notification message
   readonly successMessage: Locator;
+  readonly notificationMemberHasBeenRemovedMessage: Locator;
 
   //Group page
   readonly keyPeopleSection: Locator;
@@ -68,8 +74,16 @@ export class GroupPage {
   readonly membersSection: Locator;
   readonly membersCheckboxes: Locator;
   readonly cardView: Locator;
+  readonly tableView: Locator;
   readonly secretariatCard: Locator;
   readonly editFormMember: Locator;
+
+  //Member Edit form
+  readonly dropdownRoleFieldForSecretariat: Locator;
+  readonly memberOptionToSelectInEditMemberForm: Locator;
+  readonly removeChairButtonFromTableViewGrouPage: Locator;
+  readonly removeViceChairButtonFromTableViewGrouPage: Locator;
+  readonly removeSecretariatButtonFromTableViewGrouPage: Locator;
 
 
   constructor(page: Page) {
@@ -126,6 +140,8 @@ export class GroupPage {
     // Confirmation dialog
     this.confirmationHeading = page.getByRole('heading', { name: 'Confirmation' });
     this.confirmationMessage = page.getByText('Are you sure you want to');
+    this.confirmationMessageLastRole = page.getByText(/Attention/i);
+    this.confirmationRemoveHeading = page.getByText(/Remove member/i);
 
     // Error messages for invalid data
     this.nameInvalidError = page.getByText('Name must contain alphanumeric characters, spaces, or hyphens only.');
@@ -133,8 +149,12 @@ export class GroupPage {
     this.codeInvalidError = page.getByText('Code must contain alphanumeric characters or hyphens only.');
     this.siteNameInvalidError = page.getByText('Site Name must contain alphanumeric characters or hyphens only.');
    
+    //Error message for members same role
+    this.membersSameRoleError = page.getByText('A user can\'t be assigned to');
+
     //notification message
     this.successMessage = page.getByText(/successfully/i);
+    this.notificationMemberHasBeenRemovedMessage = page.getByText(/has been removed/i);
 
     //Group page
     this.keyPeopleSection = page.getByText('Key People', { exact: true })
@@ -144,7 +164,18 @@ export class GroupPage {
     this.membersSection = page.getByText('Members', { exact: true })
     this.membersCheckboxes =  page.getByRole('checkbox');
     this.cardView = page.getByRole('button', { name: 'Cards' });
+    this.tableView = page.getByRole('button', { name: 'Table' });
     this.secretariatCard = page.getByRole('button', { name: 'TestSecretariatBradford' });
     this.editFormMember =page.getByRole('button', { name: 'Edit role' });
+
+    //Member Edit form
+    this.dropdownRoleFieldForSecretariat = page.getByLabel('Overview').getByText('Secretariat', { exact: true });
+    this.memberOptionToSelectInEditMemberForm = page.getByRole('option', { name: 'Member' });
+    this.removeChairButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestChairJulio' }).getByLabel('Remove member');
+    this.removeViceChairButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestViceChairFredrick' }).getByLabel('Remove member');
+    this.removeSecretariatButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestSecretariatBradford' }).getByLabel('Remove member');
+
+
+
   }
 }

@@ -28,7 +28,7 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
     await expect(groupPage.groupsButton).toBeVisible();
      
-    await groupActions.goToCertainGroup(manualData.workGroup);
+    await groupActions.goToCertainGroup(manualData.editWGpositive);
 
     //click on pensil icon to edit WG
     await groupPage.editWorkingGroupButton.click();
@@ -97,7 +97,7 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
     //remove roles and edit to original name and description
     await groupActions.removeRolesinEditForm();
     await groupActions.fillEditGroupForm({
-      name: manualData.workGroup,
+      name: manualData.editWGpositive,
       description: manualData.description
     });
    
@@ -115,14 +115,14 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
   try {
   await expect(async () => {
     await page.reload();
-    await groupPage.searchBoxAdministrationPage.fill(manualData.workGroup);
+    await groupPage.searchBoxAdministrationPage.fill(manualData.editWGpositive);
     await groupPage.searchBoxAdministrationPage.press('Enter');
-    await expect(groupActions.verifyGroupInList(manualData.workGroup)).toBeVisible();
+    await expect(groupActions.verifyGroupInList(manualData.editWGpositive)).toBeVisible();
     //click on pensil icon to edit WG
     await groupPage.editWorkingGroupButton.click();
      // Verify form heading
     await expect(groupPage.editWorkingGroupHeading).toBeVisible();
-    await expect(groupPage.nameField).toHaveValue(manualData.workGroup);
+    await expect(groupPage.nameField).toHaveValue(manualData.editWGpositive);
     //verify roles being present in the edit form
     await expect(groupPage.personTag.filter({hasText: 'TestChairJulio',})).not.toBeVisible();
     await expect(groupPage.personTag.filter({hasText: 'TestViceChairFredrick',})).not.toBeVisible();
@@ -147,7 +147,7 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
     // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     
-    await groupActions.goToCertainGroup(manualData.workGroup);
+    await groupActions.goToCertainGroup(manualData.editWGNegative);
 
     //click on pensil icon to edit WG
     await groupPage.editWorkingGroupButton.click();
@@ -169,7 +169,7 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
  // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     
-    await groupActions.goToCertainGroup(manualData.workGroup);
+    await groupActions.goToCertainGroup(manualData.editWGNegative);
 
     //click on pensil icon to edit WG
     await groupPage.editWorkingGroupButton.click();

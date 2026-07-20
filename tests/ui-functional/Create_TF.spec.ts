@@ -76,8 +76,10 @@ test.describe('Task Force Management creation', () => {
     groupActions.verifyGroupInList(TFrandomName.name)
     ).toBeVisible();
     }).toPass({
-    timeout: 300000,   // total retry time as 5 minutes
-    intervals: [10000] // retry every 10s
+    // timeout: 300000,   // total retry time as 5 minutes
+    // intervals: [10000] // retry every 10s
+     timeout: 3000,   
+     intervals: [100] 
   });
 
   
@@ -161,9 +163,10 @@ test.describe('Task Force Management creation', () => {
     groupActions.verifyGroupInList(TFrandomName.name)
     ).toBeVisible();
     }).toPass({
-    timeout: 300000,   // total retry time as 5 minutes
-    intervals: [10000] // retry every 10s
-  });
-
+   // timeout: 300000,   // total retry time as 5 minutes
+    // intervals: [10000] // retry every 10s
+     timeout: 3000,   
+     intervals: [100] 
+    }); 
   });
 });

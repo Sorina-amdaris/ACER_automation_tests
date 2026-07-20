@@ -29,7 +29,7 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
     // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
      
-    await groupActions.goToCertainGroup(manualData.taskForce);
+    await groupActions.goToCertainGroup(manualData.editTFpositive);
 
     //click on pensil icon to edit TF
     await groupPage.editTaskForceButton.click();
@@ -98,7 +98,7 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
     //remove roles and edit to original name and description
     await groupActions.removeRolesinEditForm();
     await groupActions.fillEditGroupForm({
-      name: manualData.taskForce,
+      name: manualData. editTFpositive,
       description: manualData.description
     });
    
@@ -116,14 +116,14 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
   try {
   await expect(async () => {
     await page.reload();
-    await groupPage.searchBoxAdministrationPage.fill(manualData.taskForce);
+    await groupPage.searchBoxAdministrationPage.fill(manualData.editTFpositive);
     await groupPage.searchBoxAdministrationPage.press('Enter');
-    await expect(groupActions.verifyGroupInList(manualData.taskForce)).toBeVisible();
+    await expect(groupActions.verifyGroupInList(manualData.editTFpositive)).toBeVisible();
     //click on pensil icon to edit TF
     await groupPage.editTaskForceButton.click();
      // Verify form heading
     await expect(groupPage.editTaskForceHeading).toBeVisible();
-    await expect(groupPage.nameField).toHaveValue(manualData.taskForce);
+    await expect(groupPage.nameField).toHaveValue(manualData.editTFpositive);
     //verify roles being present in the edit form
     await expect(groupPage.personTag.filter({hasText: 'TestChairJulio',})).not.toBeVisible();
     await expect(groupPage.personTag.filter({hasText: 'TestViceChairFredrick',})).not.toBeVisible();
@@ -148,7 +148,7 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
     // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     
-    await groupActions.goToCertainGroup(manualData.taskForce);
+    await groupActions.goToCertainGroup(manualData.editTFNegative);
 
     //click on pensil icon to edit TF
     await groupPage.editTaskForceButton.click();
@@ -170,7 +170,7 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
  // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     
-    await groupActions.goToCertainGroup(manualData.taskForce);
+    await groupActions.goToCertainGroup(manualData.editTFNegative);
     //click on pensil icon to edit TF
     await groupPage.editTaskForceButton.click();
   

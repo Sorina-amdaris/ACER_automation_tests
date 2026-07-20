@@ -27,9 +27,9 @@ export class GroupActions {
 
    async goToClickCreateTaskForce() {
 
-    await this.groupPage.searchBoxAdministrationPage.fill(manualData.workGroup);
+    await this.groupPage.searchBoxAdministrationPage.fill(manualData.WGToCreateTFnegativeTests);
     await this.groupPage.searchBoxAdministrationPage.press('Enter');
-    await expect(this.page.getByText(manualData.workGroup)).toBeVisible();
+    await expect(this.page.getByText(manualData.WGToCreateTFnegativeTests)).toBeVisible();
     await this.groupPage.addTaskForceButton.click();
    }
 

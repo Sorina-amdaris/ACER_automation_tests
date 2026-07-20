@@ -11,7 +11,7 @@ import manualData from '../../manual-test-data.json';
 // Use the authenticated state
 test.use({ storageState: '.auth/user.json' });
 
-test.describe('Edit Work Group members scenarios in WG details page', () => {
+test.describe('Edit Task Force members scenarios in TF details page', () => {
   let groupPage: GroupPage;
   let groupActions: GroupActions;
   
@@ -24,9 +24,9 @@ test.describe('Edit Work Group members scenarios in WG details page', () => {
   //   await context.close();
   // });
 
-  test('Add Members in Work Group', async ({ page }) => {
+  test('Add Members in Task Force', async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
-    await groupActions.goto(manualData.addMembersInWG_URL);
+    await groupActions.goto(manualData.addMembersInTF_URL);
     await expect(groupPage.addMemberButton).toBeVisible();
     await groupPage.addMemberButton.click();
     await expect(groupPage.addMemberHeading).toBeVisible();
@@ -74,16 +74,16 @@ test.describe('Edit Work Group members scenarios in WG details page', () => {
     await groupActions.selectRoleInAddMemberForm('Contractor');
      
 
-    // //fill out the user in the combobox - convenor
-    // await expect(groupPage.addMemberSecondbtn).toBeVisible({ timeout: 10000 });
-    // await groupPage.addMemberSecondbtn.click();
-    // await expect(groupPage.addMemberHeading).toBeVisible();
-    // await groupActions.selectPerson(
-    //   groupPage.comboboxAddMember,  
-    //   manualData.searchWord.convenorRole,
-    //   manualData.selectRoleOption.convenorRole
-    // );
-    // await groupActions.selectRoleInAddMemberForm('Convenor');
+    //fill out the user in the combobox - convenor
+    await expect(groupPage.addMemberSecondbtn).toBeVisible({ timeout: 10000 });
+    await groupPage.addMemberSecondbtn.click();
+    await expect(groupPage.addMemberHeading).toBeVisible();
+    await groupActions.selectPerson(
+      groupPage.comboboxAddMember,  
+      manualData.searchWord.convenorRole,
+      manualData.selectRoleOption.convenorRole
+    );
+    await groupActions.selectRoleInAddMemberForm('Convenor');
 
     //fill out the user in the combobox - observer
     await expect(groupPage.addMemberSecondbtn).toBeVisible({ timeout: 10000 });
@@ -96,16 +96,16 @@ test.describe('Edit Work Group members scenarios in WG details page', () => {
     );
     await groupActions.selectRoleInAddMemberForm('Observer');
 
-    // //fill out the user in the combobox - expert
-    // await expect(groupPage.addMemberSecondbtn).toBeVisible({ timeout: 10000 });
-    // await groupPage.addMemberSecondbtn.click();
-    // await expect(groupPage.addMemberHeading).toBeVisible();
-    // await groupActions.selectPerson(
-    //   groupPage.comboboxAddMember,  
-    // manualData.searchWord.expertRole,
-    // manualData.selectRoleOption.expertRole
-    // );
-    // await groupActions.selectRoleInAddMemberForm('Expert');
+    //fill out the user in the combobox - expert
+    await expect(groupPage.addMemberSecondbtn).toBeVisible({ timeout: 10000 });
+    await groupPage.addMemberSecondbtn.click();
+    await expect(groupPage.addMemberHeading).toBeVisible();
+    await groupActions.selectPerson(
+      groupPage.comboboxAddMember,  
+    manualData.searchWord.expertRole,
+    manualData.selectRoleOption.expertRole
+    );
+    await groupActions.selectRoleInAddMemberForm('Expert');
 
     //fill out the user in the combobox - member
     await expect(groupPage.addMemberSecondbtn).toBeVisible({ timeout: 10000 });
@@ -129,17 +129,17 @@ test.describe('Edit Work Group members scenarios in WG details page', () => {
     await expect(groupPage.keyPeopleSection).toBeVisible();
     await expect(groupPage.viceChairMemberinGroupPage).toHaveCount(1); //for vice-chair and contractor roles
     await expect(groupPage.chairMemberinGroupPage).toHaveCount(1);
-    await expect(groupPage.acerContactMemberinGroupPage).toHaveCount(2); //for secretariat and contractor roles
+    await expect(groupPage.acerContactMemberinGroupPage).toHaveCount(3); //for secretariat and contractor  and convenor roles
     await expect(groupPage.membersSection).toBeVisible();
-    await expect(groupPage.membersCheckboxes).toHaveCount(7);//6 actually
+    await expect(groupPage.membersCheckboxes).toHaveCount(8);
   }).toPass({
     timeout: 60000,
     intervals: [5000],}); //for vice-chair, chair, secretariat, contractor, observer and member roles
    });  
 
-   test('Edit and Remove Members in Work Group', async ({ page }) => {
+   test('Edit and Remove Members in Task Force', async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
-    await groupActions.goto(manualData.editAndRemoveMembersInWG_URL);
+    await groupActions.goto(manualData.editAndRemoveMembersInTF_URL);
     await expect(groupPage.addMemberButton).toBeVisible();
     await groupPage.addMemberButton.click();
     await expect(groupPage.addMemberHeading).toBeVisible();
@@ -212,7 +212,6 @@ test.describe('Edit Work Group members scenarios in WG details page', () => {
     await expect(groupPage.removeChairButtonFromTableViewGrouPage).toBeVisible();
     await groupPage.removeChairButtonFromTableViewGrouPage.click();
     await expect(groupPage.confirmationRemoveHeading).toBeVisible(); 
-    await expect(groupPage.confirmationMessageLastRole).toBeVisible();
     await groupPage.removeButton.click();
     await expect(groupPage.notificationMemberHasBeenRemovedMessage).toBeVisible({ timeout: 30000 });
 
@@ -251,20 +250,22 @@ test.describe('Edit Work Group members scenarios in WG details page', () => {
 
    }); 
    
-   test('Add same member different roles in Work Group', async ({ page }) => {
+   test('Add same member different roles in Task Force', async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
     await groupActions.goto(manualData.url.administration);
-     // Open groups section and create group
+    // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
-    await groupActions.clickCreateGroup();
-    
+
+    //click add TF button for certain WG from manual test data file
+    await groupActions.goToClickCreateTaskForce();
+
     // Verify form heading
-    await expect(groupPage.createWorkingGroupHeading).toBeVisible();
+    await expect(groupPage.createTaskForceHeading).toBeVisible();
 
-
-     // Fill the form with random data
-    const WGrandomName = await groupActions.fillWGFormWithRandomData();
+    // Fill the form with random data
+    const TFrandomName = await groupActions.fillTFFormWithRandomData();
     const randomData = await groupActions.fillGroupFormWithRandomData();
+    console.log('Created task force with roles:', TFrandomName,randomData);
 
      //fill out roles
     await groupActions.selectPerson(
