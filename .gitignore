@@ -10,3 +10,8 @@ node_modules/
 # Authentication state (contains sensitive session data)
 .auth/
 *.json
+
+# But we need these files
+!package.json
+!package-lock.json
+!tsconfig.json
