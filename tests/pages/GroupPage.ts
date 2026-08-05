@@ -40,6 +40,10 @@ export class GroupPage {
   readonly descriptionRequiredError: Locator;
   readonly codeRequiredError: Locator;
   readonly siteNameRequiredError: Locator;
+  readonly firstNameRequiredError: Locator;
+  readonly lastNameRequiredError: Locator;
+  readonly passwordRequiredError: Locator;
+  
   
   // Buttons
   readonly saveButton: Locator;
@@ -52,12 +56,16 @@ export class GroupPage {
   readonly confirmationMessage: Locator;
   readonly confirmationRemoveHeading: Locator;
   readonly confirmationMessageLastRole: Locator;
+ 
 
   // Error messages for invalid data
   readonly nameInvalidError: Locator;
   readonly descriptionInvalidError: Locator;
   readonly codeInvalidError: Locator  ;
   readonly siteNameInvalidError: Locator; 
+  readonly passwordInvalidError: Locator;
+  readonly firstNameInvalidError: Locator;
+  readonly lastNameInvalidError: Locator;
 
   //Error message for members same role
   readonly membersSameRoleError: Locator;
@@ -65,6 +73,7 @@ export class GroupPage {
   //notification message
   readonly successMessage: Locator;
   readonly notificationMemberHasBeenRemovedMessage: Locator;
+  readonly duplicateUserMessage: Locator;
 
   //Group page
   readonly keyPeopleSection: Locator;
@@ -84,6 +93,21 @@ export class GroupPage {
   readonly removeChairButtonFromTableViewGrouPage: Locator;
   readonly removeViceChairButtonFromTableViewGrouPage: Locator;
   readonly removeSecretariatButtonFromTableViewGrouPage: Locator;
+
+  //user management
+  readonly userButton: Locator;
+  readonly createUserButton: Locator;
+  readonly createUserHeading: Locator;
+  readonly firstNameField: Locator;
+  readonly lastNameField: Locator;
+  readonly passwordField: Locator;
+  readonly organisationField: Locator;   
+  readonly userCreated: Locator; 
+  readonly editUserbutton: Locator;
+  readonly editUserHeading: Locator;
+  readonly removeUser: Locator;
+  readonly confirmationDeleteUser: Locator;
+  readonly deleteButtonUserConfirmation: Locator;
 
 
   constructor(page: Page) {
@@ -130,6 +154,9 @@ export class GroupPage {
     this.descriptionRequiredError = page.getByText('Description is required.');
     this.codeRequiredError = page.getByText('Code is required.');
     this.siteNameRequiredError = page.getByText('Site Name is required.');
+    this.firstNameRequiredError = page.getByText('First Name is required.');      
+    this.lastNameRequiredError = page.getByText('Last Name is required.');
+    this.passwordRequiredError = page.getByText('Password is required.');
     
     // Buttons
     this.saveButton = page.getByRole('button', { name: 'Save' });
@@ -142,12 +169,16 @@ export class GroupPage {
     this.confirmationMessage = page.getByText('Are you sure you want to');
     this.confirmationMessageLastRole = page.getByText(/Attention/i);
     this.confirmationRemoveHeading = page.getByText(/Remove member/i);
+    this.confirmationDeleteUser = page.getByRole('heading', { name: 'Delete User' });
 
     // Error messages for invalid data
     this.nameInvalidError = page.getByText('Name must contain alphanumeric characters, spaces, or hyphens only.');
     this.descriptionInvalidError = page.getByText('Description must contain valid characters (alphanumeric, spaces, and common punctuation).');
     this.codeInvalidError = page.getByText('Code must contain alphanumeric characters or hyphens only.');
     this.siteNameInvalidError = page.getByText('Site Name must contain alphanumeric characters or hyphens only.');
+    this.passwordInvalidError = page.getByText('Password must be at least 8 characters');
+    this.firstNameInvalidError = page.getByText('First Name must contain');
+    this.lastNameInvalidError = page.getByText('Last Name must contain');
    
     //Error message for members same role
     this.membersSameRoleError = page.getByText('A user can\'t be assigned to');
@@ -155,6 +186,8 @@ export class GroupPage {
     //notification message
     this.successMessage = page.getByText(/successfully/i);
     this.notificationMemberHasBeenRemovedMessage = page.getByText(/has been removed/i);
+    this.duplicateUserMessage = page.getByText(/A user with email/i);
+    //this.duplicateUserMessage = page.getByText(/A conflicting object with one/i);
 
     //Group page
     this.keyPeopleSection = page.getByText('Key People', { exact: true })
@@ -175,7 +208,19 @@ export class GroupPage {
     this.removeViceChairButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestViceChairFredrick' }).getByLabel('Remove member');
     this.removeSecretariatButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestSecretariatBradford' }).getByLabel('Remove member');
 
-
-
+    //user management
+    this.userButton = page.getByRole('button', { name: 'Users' });
+    this.createUserButton = page.getByRole('button', { name: 'Create User' });
+    this.createUserHeading = page.getByRole('heading', { name: 'Create User' })
+    this.firstNameField = page.getByRole('textbox', { name: 'First Name *' });
+    this.lastNameField = page.getByRole('textbox', { name: 'Last Name *' });
+    this.passwordField = page.getByRole('textbox', { name: 'Password *' });
+    this.organisationField = page.getByRole('textbox', { name: 'Organisation' });
+    this.userCreated = page.getByRole('button', { name: 'Opens Profile Card' });
+    this.editUserbutton =page.getByRole('button', { name: 'Edit User' });
+    this.editUserHeading = page.getByRole('heading', { name: 'Edit User' });
+    this.removeUser = page.getByRole('button', { name: 'Delete User' });
+    this.deleteButtonUserConfirmation = page.getByRole('button', { name: 'Delete' })
+    
   }
 }

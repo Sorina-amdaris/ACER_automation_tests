@@ -1,0 +1,21 @@
+You have these options:
+Precondition:
+from Inspect on UI run a request and copy the Bearer token.
+Paste it manually in .env Acer_Bearer_token
+
+VS Code Play button
+Run a single test, a describe, or a whole file from ACER_API_positive.spec.ts or ACER_API_negative.spec.ts.
+NPM scripts (already in package.json)
+All API tests: npm run test:api
+API headed: npm run test:api:headed
+All tests (UI + API): npm test
+Direct Playwright commands
+Positive only: npx playwright test tests/api/ACER_API_positive.spec.ts
+Negative only: npx playwright test tests/api/ACER_API_negative.spec.ts
+One test by name: npx playwright test [ACER_API_positive.spec.ts](http://_vscodecontentref_/5) -g "CreateUser -> UpdateUser -> DeleteUser"
+Report
+Open HTML report: npm run report (or npx playwright show-report)
+Important for positive tests:
+
+They are gated by RUN_ACER_API_MUTATION_TESTS=true and auth/token settings from .env.example.
+Negative unauthorized tests can run without that.

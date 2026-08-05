@@ -135,7 +135,8 @@ test.describe('Edit Task Force members scenarios in TF details page', () => {
   }).toPass({
     timeout: 60000,
     intervals: [5000],}); //for vice-chair, chair, secretariat, contractor, observer and member roles
-   });  
+   }); 
+   
 
    test('Edit and Remove Members in Task Force', async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes

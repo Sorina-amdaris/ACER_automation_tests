@@ -1,4 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path from 'path';
 
 /**
  * Read environment variables from file.
@@ -6,7 +8,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 // import dotenv from 'dotenv';
 // import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -31,7 +33,7 @@ export default defineConfig({
         ['junit', { outputFile: 'test-results/junit.xml' }],
         ['github'],
       ]
-    : 'html',
+    : [['html', { outputFolder: 'playwright-report', open: 'always' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -67,6 +69,7 @@ export default defineConfig({
     
     {
       name: 'chromium',
+      testIgnore: ['**/tests/api/**/*.spec.ts'],
       use: { 
         ...devices['Desktop Chrome'],
         // Use saved authentication state
@@ -75,6 +78,14 @@ export default defineConfig({
         viewport: { width: 1536, height: 864 },
       },
       dependencies: ['setup'],
+    },
+
+    {
+      name: 'api',
+      testMatch: ['**/tests/api/**/*.spec.ts'],
+      use: {
+        baseURL: process.env.ACER_API_BASE_URL || 'https://acer-spo-api-fkb0bhbshngtb6g4.polandcentral-01.azurewebsites.net/api',
+      },
     },
 
     // Commented out to run only on Chromium

@@ -25,6 +25,11 @@ export class GroupActions {
 
   }
 
+   async clickCreateUser() {
+    await this.groupPage.createUserButton.click();
+    await expect(this.groupPage.saveButton).toBeVisible();
+  }
+
    async goToClickCreateTaskForce() {
 
     await this.groupPage.searchBoxAdministrationPage.fill(manualData.WGToCreateTFnegativeTests);
@@ -57,7 +62,17 @@ export class GroupActions {
       name: "TF Auto " + generateName(5, 15)
     };  
   }
+  generateUserFirstNameRandomName() {
+    return {
+      name: "User" + generateName(5, 15)
+    };  
+  }
 
+  generateUserLastNameRandomName() {
+    return {
+      name: generateName(5, 15)
+    };  
+  }
   async fillWGNameForm(data: {
     name: string;
  
@@ -82,6 +97,16 @@ export class GroupActions {
     await this.groupPage.codeField.fill(data.code);
     await this.groupPage.siteNameField.fill(data.siteName);
   }
+   async fillUserForm(data: {
+    
+    firstName: string;
+    lastName: string;
+    password: string;
+  }) {
+    await this.groupPage.firstNameField.fill(data.firstName);
+    await this.groupPage.lastNameField.fill(data.lastName);
+    await this.groupPage.passwordField.fill(data.password);
+  }
 
   async fillGroupFormWithRandomData() {
     const randomData = this.generateGroupRandomFormData();
@@ -98,6 +123,12 @@ export class GroupActions {
     const TFrandomName = this.generateTFRandomName();
     await this.fillTFNameForm(TFrandomName);
     return TFrandomName; 
+  }
+  async fillUserFormWithRandomData() {
+    const userFirstName = this.generateUserFirstNameRandomName();
+    const userLastName = this.generateUserLastNameRandomName();
+    await this.fillUserForm({ firstName: userFirstName.name, lastName: userLastName.name, password: 'defaultPassword123' });
+    return { userFirstName, userLastName }; 
   }
 
    // Form filling methods
@@ -158,6 +189,15 @@ export class GroupActions {
       siteName: this.groupPage.siteNameInvalidError
     };
   }
+  //validation for invalid data create user form
+  async verifyUserCreateInvalidFieldErrors() {
+    await this.groupPage.saveButton.click();
+    return {
+      firstName: this.groupPage.firstNameInvalidError,
+      lastName: this.groupPage.lastNameInvalidError,
+      password: this.groupPage.passwordInvalidError,
+    };
+  }
 
   //validation for invalid data edit form
   async verifyEditInvalidFieldErrors() {
@@ -195,6 +235,11 @@ export class GroupActions {
     await this.groupPage.nameField.fill('$% string');
     await this.groupPage.descriptionField.fill('_?^^');
   }
+   async insertInvalidDataInUserCreateForm() {
+    await this.groupPage.firstNameField.fill('$% string');
+    await this.groupPage.lastNameField.fill('_?^^');
+    await this.groupPage.passwordField.fill('$# &');
+  }
  
   async cancelForm() {
     await this.groupPage.cancelButton.click();
@@ -230,4 +275,14 @@ async selectRoleInAddMemberForm(role: string) {
     await expect(this.verifySuccessMessage()).toBeVisible({ timeout: 5000 });
  
 }
+
+ // Validation methods create user form
+  async verifyUserCreationRequiredFieldErrors() {
+    await this.groupPage.saveButton.click();
+    return {
+      firstName: this.groupPage.firstNameRequiredError,
+      lastName: this.groupPage.lastNameRequiredError,
+      password: this.groupPage.passwordRequiredError,
+    };
+  }
 }

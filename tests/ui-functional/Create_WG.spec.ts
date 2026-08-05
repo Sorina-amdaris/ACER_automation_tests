@@ -4,7 +4,8 @@ import { GroupActions } from '../actions/GroupActions';
 import manualData from '../../manual-test-data.json';
 import { FileSaver } from '../utils/fileSaver';
 
-//RUN: npx playwright test tests/ui-functional/create-work-group-without-roles.spec.ts --headed   
+//RUN: npx playwright test tests/ui-functional/create-work-group-without-roles.spec.ts --headed  
+//npx playwright show-report 
 
 // Use the authenticated state
 test.use({ storageState: '.auth/user.json' });
