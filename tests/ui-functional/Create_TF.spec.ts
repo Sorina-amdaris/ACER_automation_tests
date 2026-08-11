@@ -64,22 +64,15 @@ test.describe('Task Force Management creation', () => {
 
     //save the site for later verification
     await FileSaver.saveSiteData(randomData.siteName, 'created-task-forces_withRoles.json');
-  
+    const siteUrl = FileSaver.getLastUrl('created-task-forces_withRoles.json');
+    
    // Retry mechanism to check for the work group in the list
     await expect(async () => {
-    await page.reload();
-    
-    await groupPage.searchBoxAdministrationPage.fill(TFrandomName.name);
-    await groupPage.searchBoxAdministrationPage.press('Enter');
-
-    await expect(
-    groupActions.verifyGroupInList(TFrandomName.name)
-    ).toBeVisible();
+    await groupActions.goto(siteUrl);
+    await expect(groupPage.extranetHubLink).toBeVisible()
     }).toPass({
-    // timeout: 300000,   // total retry time as 5 minutes
-    // intervals: [10000] // retry every 10s
-     timeout: 3000,   
-     intervals: [100] 
+    timeout: 300000,   // total retry time as 5 minutes
+    intervals: [10000] // retry every 10s
   });
 
   
@@ -152,21 +145,16 @@ test.describe('Task Force Management creation', () => {
     
     await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 5000 });
     await FileSaver.saveSiteData(randomData.siteName, 'created-task-forces_withoutRoles.json');
+    const siteUrl = FileSaver.getLastUrl('created-task-forces_withoutRoles.json');
+
    // Retry mechanism to check for the work group in the list
     await expect(async () => {
-    await page.reload();
-    
-    await groupPage.searchBoxAdministrationPage.fill(TFrandomName.name);
-    await groupPage.searchBoxAdministrationPage.press('Enter');
-
-    await expect(
-    groupActions.verifyGroupInList(TFrandomName.name)
-    ).toBeVisible();
+    await groupActions.goto(siteUrl);
+    await expect(groupPage.extranetHubLink).toBeVisible()
     }).toPass({
-   // timeout: 300000,   // total retry time as 5 minutes
-    // intervals: [10000] // retry every 10s
-     timeout: 3000,   
-     intervals: [100] 
-    }); 
+    timeout: 300000,   // total retry time as 5 minutes
+    intervals: [10000] // retry every 10s
   });
+});
+  
 });

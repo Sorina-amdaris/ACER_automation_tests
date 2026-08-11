@@ -54,4 +54,11 @@ export class FileSaver {
     console.log(`Timestamp: ${timestamp}`);
     console.log(`URL: ${url}`);
   }
+
+  static getLastUrl(fileName: string): string {
+    const filePath = path.join(this.dataDir, fileName);
+    const fileContent = fs.readFileSync(filePath, 'utf-8');
+    const data: SiteData[] = JSON.parse(fileContent);
+    return data[data.length - 1].url;
+  }
 }

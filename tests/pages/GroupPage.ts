@@ -12,6 +12,7 @@ export class GroupPage {
   readonly addTaskForceButton: Locator;
   readonly editWorkingGroupButton: Locator;
   readonly editTaskForceButton: Locator;
+  readonly editGroupButton: Locator;
   // Form heading
   readonly createWorkingGroupHeading: Locator;
   readonly createTaskForceHeading: Locator;
@@ -86,6 +87,7 @@ export class GroupPage {
   readonly tableView: Locator;
   readonly secretariatCard: Locator;
   readonly editFormMember: Locator;
+  readonly extranetHubLink: Locator;
 
   //Member Edit form
   readonly dropdownRoleFieldForSecretariat: Locator;
@@ -93,6 +95,11 @@ export class GroupPage {
   readonly removeChairButtonFromTableViewGrouPage: Locator;
   readonly removeViceChairButtonFromTableViewGrouPage: Locator;
   readonly removeSecretariatButtonFromTableViewGrouPage: Locator;
+  readonly removeContractorButtonFromTableViewGrouPage: Locator;
+  readonly removeObserverButtonFromTableViewGrouPage: Locator;
+  readonly removeMemberButtonFromTableViewGrouPage: Locator;
+  readonly removeConvenorButtonFromTableViewGrouPage: Locator;
+  readonly removeExpertButtonFromTableViewGrouPage: Locator;
 
   //user management
   readonly userButton: Locator;
@@ -121,6 +128,7 @@ export class GroupPage {
     this.searchBoxAdministrationPage = page.getByRole('searchbox', { name: 'Search' });
     this.addTaskForceButton = page.getByRole('button', { name: 'Add Task Force' });
     this.editWorkingGroupButton = page.getByRole('button', { name: 'Edit Working Group' });
+    this.editGroupButton = page.getByRole('button', { name: 'Edit', exact: true })
     this.editTaskForceButton = page.getByRole('button', { name: 'Edit Task Force' });
     
     // Form heading
@@ -200,6 +208,7 @@ export class GroupPage {
     this.tableView = page.getByRole('button', { name: 'Table' });
     this.secretariatCard = page.getByRole('button', { name: 'TestSecretariatBradford' });
     this.editFormMember =page.getByRole('button', { name: 'Edit role' });
+    this.extranetHubLink = page.getByRole('link', { name: 'ExtranetHub hub site' });
 
     //Member Edit form
     this.dropdownRoleFieldForSecretariat = page.getByLabel('Overview').getByText('Secretariat', { exact: true });
@@ -207,7 +216,13 @@ export class GroupPage {
     this.removeChairButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestChairJulio' }).getByLabel('Remove member');
     this.removeViceChairButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestViceChairFredrick' }).getByLabel('Remove member');
     this.removeSecretariatButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestSecretariatBradford' }).getByLabel('Remove member');
-
+    this.removeContractorButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestContractorMario' }).getByLabel('Remove member');
+    this.removeObserverButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestObserverAlly' }).getByLabel('Remove member');
+    this.removeMemberButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestMemberRamon' }).getByLabel('Remove member');
+    this.removeConvenorButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestConvenorLolita' }).getByLabel('Remove member');
+    this.removeExpertButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestExpertJacynthe' }).getByLabel('Remove member');
+    
+    
     //user management
     this.userButton = page.getByRole('button', { name: 'Users' });
     this.createUserButton = page.getByRole('button', { name: 'Create User' });

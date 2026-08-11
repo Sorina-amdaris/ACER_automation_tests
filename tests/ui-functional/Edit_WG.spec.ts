@@ -28,7 +28,7 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
     await expect(groupPage.groupsButton).toBeVisible();
      
-    await groupActions.goToCertainGroup(manualData.editWGpositive);
+    await groupActions.goToCertainGroup(manualData.editWG);
 
     //click on pensil icon to edit WG
     await groupPage.editWorkingGroupButton.click();
@@ -64,9 +64,8 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
     await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 6000 });
     await page.reload({ timeout: 6000 });
 
-   //check the edit form has the previous data and roles and fails the test if not 
-  try {
-  await expect(async () => {
+    // Retry mechanism to check for the work group in the list
+    await expect(async () => {
     await page.reload();
     await groupPage.searchBoxAdministrationPage.fill(manualData.editName);
     await groupPage.searchBoxAdministrationPage.press('Enter');
@@ -81,26 +80,17 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
     await expect(groupPage.personTag.filter({hasText: 'TestChairJulio',}).first()).toBeVisible();
     await expect(groupPage.personTag.filter({ hasText: 'TestViceChairFredrick',}).first()).toBeVisible();
     await expect(groupPage.personTag.filter({hasText: 'TestSecretariatBradford',}).first()).toBeVisible();
-
-  }).toPass({
-    timeout: 60000,
-    intervals: [10000],
+    }).toPass({
+    timeout: 60000,   // total retry time as 5 minutes
+    intervals: [10000] // retry every 10s
   });
-} catch (error) {
-  const actualText = await groupPage.nameField.textContent();
 
-  console.error(
-    `Name mismatch after 60s for WG edit and roles.` 
-  );
-  throw error; // fail test
-};
     //remove roles and edit to original name and description
     await groupActions.removeRolesinEditForm();
     await groupActions.fillEditGroupForm({
-      name: manualData.editWGpositive,
+      name: manualData.editWG,
       description: manualData.description
     });
-   
     
      // Save and handle confirmation
     await groupActions.saveGroup();
@@ -110,19 +100,17 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
     await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 6000 }); 
     
    // Retry mechanism to check for the work group in the list
-  //check the edit form has the previous data and roles and fails the test if not 
   await page.reload({ timeout: 6000 });
-  try {
   await expect(async () => {
     await page.reload();
-    await groupPage.searchBoxAdministrationPage.fill(manualData.editWGpositive);
+    await groupPage.searchBoxAdministrationPage.fill(manualData.editWG);
     await groupPage.searchBoxAdministrationPage.press('Enter');
-    await expect(groupActions.verifyGroupInList(manualData.editWGpositive)).toBeVisible();
+    await expect(groupActions.verifyGroupInList(manualData.editWG)).toBeVisible();
     //click on pensil icon to edit WG
     await groupPage.editWorkingGroupButton.click();
      // Verify form heading
     await expect(groupPage.editWorkingGroupHeading).toBeVisible();
-    await expect(groupPage.nameField).toHaveValue(manualData.editWGpositive);
+    await expect(groupPage.nameField).toHaveValue(manualData.editWG);
     //verify roles being present in the edit form
     await expect(groupPage.personTag.filter({hasText: 'TestChairJulio',})).not.toBeVisible();
     await expect(groupPage.personTag.filter({hasText: 'TestViceChairFredrick',})).not.toBeVisible();
@@ -132,14 +120,6 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
     timeout: 60000,
     intervals: [10000],
   });
-} catch (error) {
-  const actualText = await groupPage.nameField.textContent();
-
-  console.error(
-    `Name mismatch after 60s for WG original and empty roles.` 
-  );
-  throw error; // fail test
-};
 
    });  
 
@@ -147,7 +127,7 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
     // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     
-    await groupActions.goToCertainGroup(manualData.editWGNegative);
+    await groupActions.goToCertainGroup(manualData.editWG);
 
     //click on pensil icon to edit WG
     await groupPage.editWorkingGroupButton.click();
@@ -169,7 +149,7 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
  // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     
-    await groupActions.goToCertainGroup(manualData.editWGNegative);
+    await groupActions.goToCertainGroup(manualData.editWG);
 
     //click on pensil icon to edit WG
     await groupPage.editWorkingGroupButton.click();

@@ -29,7 +29,7 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
     // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
      
-    await groupActions.goToCertainGroup(manualData.editTFpositive);
+    await groupActions.goToCertainGroup(manualData.editTF);
 
     //click on pensil icon to edit TF
     await groupPage.editTaskForceButton.click();
@@ -65,8 +65,7 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
     await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 6000 });
     await page.reload({ timeout: 6000 });
 
-   //check the edit form has the previous data and roles and fail the test if not 
-  try {
+   // Retry mechanism to check for the task force in the list
   await expect(async () => {
     await page.reload();
     await groupPage.searchBoxAdministrationPage.fill(manualData.editName);
@@ -82,23 +81,15 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
     await expect(groupPage.personTag.filter({hasText: 'TestChairJulio',}).first()).toBeVisible();
     await expect(groupPage.personTag.filter({ hasText: 'TestViceChairFredrick',}).first()).toBeVisible();
     await expect(groupPage.personTag.filter({hasText: 'TestSecretariatBradford',}).first()).toBeVisible();
-
   }).toPass({
     timeout: 60000,
     intervals: [10000],
   });
-} catch (error) {
-  const actualText = await groupPage.nameField.textContent();
 
-  console.error(
-    `Name mismatch after 60s for TF edit and roles.` 
-  );
-  throw error; // fail test
-};
     //remove roles and edit to original name and description
     await groupActions.removeRolesinEditForm();
     await groupActions.fillEditGroupForm({
-      name: manualData. editTFpositive,
+      name: manualData. editTF,
       description: manualData.description
     });
    
@@ -111,19 +102,17 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
     await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 6000 }); 
     
    // Retry mechanism to check for the task force in the list
-  //check the edit form has the previous data and roles and fails the test if not 
   await page.reload({ timeout: 6000 });
-  try {
   await expect(async () => {
     await page.reload();
-    await groupPage.searchBoxAdministrationPage.fill(manualData.editTFpositive);
+    await groupPage.searchBoxAdministrationPage.fill(manualData.editTF);
     await groupPage.searchBoxAdministrationPage.press('Enter');
-    await expect(groupActions.verifyGroupInList(manualData.editTFpositive)).toBeVisible();
+    await expect(groupActions.verifyGroupInList(manualData.editTF)).toBeVisible();
     //click on pensil icon to edit TF
     await groupPage.editTaskForceButton.click();
      // Verify form heading
     await expect(groupPage.editTaskForceHeading).toBeVisible();
-    await expect(groupPage.nameField).toHaveValue(manualData.editTFpositive);
+    await expect(groupPage.nameField).toHaveValue(manualData.editTF);
     //verify roles being present in the edit form
     await expect(groupPage.personTag.filter({hasText: 'TestChairJulio',})).not.toBeVisible();
     await expect(groupPage.personTag.filter({hasText: 'TestViceChairFredrick',})).not.toBeVisible();
@@ -133,14 +122,6 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
     timeout: 60000,
     intervals: [10000],
   });
-} catch (error) {
-  const actualText = await groupPage.nameField.textContent();
-
-  console.error(
-    `Name mismatch after 60s for TF original and empty roles.` 
-  );
-  throw error; // fail test
-};
 
    });  
 
@@ -148,7 +129,7 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
     // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     
-    await groupActions.goToCertainGroup(manualData.editTFNegative);
+    await groupActions.goToCertainGroup(manualData.editTF);
 
     //click on pensil icon to edit TF
     await groupPage.editTaskForceButton.click();
@@ -170,7 +151,7 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
  // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     
-    await groupActions.goToCertainGroup(manualData.editTFNegative);
+    await groupActions.goToCertainGroup(manualData.editTF);
     //click on pensil icon to edit TF
     await groupPage.editTaskForceButton.click();
   
