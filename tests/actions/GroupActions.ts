@@ -4,6 +4,8 @@ import { test, expect } from '@playwright/test';
 import { generateWorkGroupData, generateCode, generateSiteName, generateName, generateRandomDescription } from '../utils/testDataGenerator';
 import manualData from '../../manual-test-data.json';
 
+export type GroupType = 'WG' | 'TF' | 'BOR' | 'BOA' | 'AB';
+
 export class GroupActions {
   readonly page: Page;
   readonly groupPage: GroupPage;
@@ -32,9 +34,9 @@ export class GroupActions {
 
    async goToClickCreateTaskForce() {
 
-    await this.groupPage.searchBoxAdministrationPage.fill(manualData.WGToCreateTFnegativeTests);
+    await this.groupPage.searchBoxAdministrationPage.fill(manualData.editWG);
     await this.groupPage.searchBoxAdministrationPage.press('Enter');
-    await expect(this.page.getByText(manualData.WGToCreateTFnegativeTests)).toBeVisible();
+    await expect(this.page.getByText(manualData.editWG)).toBeVisible();
     await this.groupPage.addTaskForceButton.click();
    }
 
@@ -51,17 +53,13 @@ export class GroupActions {
       siteName: generateSiteName(10)
     };
   }
-  generateWGRandomName() {
+  // Dynamic name generator shared by WG, TF and BOR creation flows
+  generateGroupRandomName(groupType: GroupType) {
     return {
-      name: "WG Auto " + generateName(5, 15)
-    };  
+      name: `${groupType} Auto ` + generateName(5, 15)
+    };
   }
 
-  generateTFRandomName() {
-    return {
-      name: "TF Auto " + generateName(5, 15)
-    };  
-  }
   generateUserFirstNameRandomName() {
     return {
       name: "User" + generateName(5, 15)
@@ -73,14 +71,8 @@ export class GroupActions {
       name: generateName(5, 15)
     };  
   }
-  async fillWGNameForm(data: {
-    name: string;
- 
-  }) {
-    await this.groupPage.nameField.fill(data.name);
-  }
-
-    async fillTFNameForm(data: {
+  // Shared by WG, TF and BOR name-only forms
+  async fillGroupNameForm(data: {
     name: string;
   }) {
     await this.groupPage.nameField.fill(data.name);
@@ -114,15 +106,10 @@ export class GroupActions {
     return randomData; // Return for verification in tests
   } 
 
-  async fillWGFormWithRandomData() {
-    const WGrandomName = this.generateWGRandomName();
-    await this.fillWGNameForm(WGrandomName);
-    return WGrandomName; 
-  }
-  async fillTFFormWithRandomData() {
-    const TFrandomName = this.generateTFRandomName();
-    await this.fillTFNameForm(TFrandomName);
-    return TFrandomName; 
+  async fillGroupNameFormWithRandomData(groupType: GroupType) {
+    const randomName = this.generateGroupRandomName(groupType);
+    await this.fillGroupNameForm(randomName);
+    return randomName;
   }
   async fillUserFormWithRandomData() {
     const userFirstName = this.generateUserFirstNameRandomName();

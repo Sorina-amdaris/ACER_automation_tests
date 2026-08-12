@@ -19,6 +19,7 @@ export class GroupPage {
   readonly editWorkingGroupHeading: Locator;
   readonly editTaskForceHeading: Locator;
   readonly addMemberHeading: Locator;
+  readonly editBoardHeading: Locator;
   
   // Form fields
   readonly nameField: Locator;
@@ -116,6 +117,15 @@ export class GroupPage {
   readonly confirmationDeleteUser: Locator;
   readonly deleteButtonUserConfirmation: Locator;
 
+  //Boards
+  readonly boardButton: Locator;
+  readonly createBoardButton: Locator;
+  readonly boardTypeDropdown: Locator;
+  readonly optionBorToSelectInBoardTypeDropdown: Locator;
+  readonly optionBoaToSelectInBoardTypeDropdown: Locator;
+  readonly optionAbToSelectInBoardTypeDropdown: Locator;
+  readonly editBoardPencilIcon: Locator;
+
 
   constructor(page: Page) {
     this.page = page;
@@ -137,6 +147,7 @@ export class GroupPage {
     this.editWorkingGroupHeading = page.getByRole('heading', { name: 'Edit Working Group' });
     this.editTaskForceHeading = page.getByRole('heading', { name: 'Edit Task Force' });
     this.addMemberHeading = page.getByRole('heading', { name: 'Add Member' });
+    this.editBoardHeading = page.getByRole('heading', { name: 'Edit Board' });
     
     // Form fields
     this.nameField = page.getByRole('textbox', { name: 'Name *',exact:true});
@@ -236,6 +247,14 @@ export class GroupPage {
     this.editUserHeading = page.getByRole('heading', { name: 'Edit User' });
     this.removeUser = page.getByRole('button', { name: 'Delete User' });
     this.deleteButtonUserConfirmation = page.getByRole('button', { name: 'Delete' })
-    
+
+    //Boards
+    this.boardButton = page.getByRole('button', { name: 'Boards' });
+    this.createBoardButton = page.getByRole('button', { name: 'Create Board' });
+    this.boardTypeDropdown = page.getByRole('combobox', { name: 'Board Type' });
+    this.optionBorToSelectInBoardTypeDropdown = page.getByRole('option', { name: 'Board of Regulators' });
+    this.optionBoaToSelectInBoardTypeDropdown = page.getByRole('option', { name: 'Board of Appeal' });
+    this.optionAbToSelectInBoardTypeDropdown = page.getByRole('option', { name: 'Administrative Board' });
+    this.editBoardPencilIcon = page.getByRole('button', { name: 'Edit Board' });
   }
 }

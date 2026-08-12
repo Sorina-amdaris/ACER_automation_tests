@@ -263,7 +263,7 @@ test.describe('Edit Work Group members scenarios in WG details page', () => {
 
 
      // Fill the form with random data
-    const WGrandomName = await groupActions.fillWGFormWithRandomData();
+    const WGrandomName = await groupActions.fillGroupNameFormWithRandomData('WG');
     const randomData = await groupActions.fillGroupFormWithRandomData();
 
      //fill out roles

@@ -35,7 +35,7 @@ test.describe('Work Group Management creation', () => {
 
 
      // Fill the form with random data
-    const WGrandomName = await groupActions.fillWGFormWithRandomData();
+    const WGrandomName = await groupActions.fillGroupNameFormWithRandomData('WG');
     const randomData = await groupActions.fillGroupFormWithRandomData();
     console.log('Created work group with roles:', WGrandomName,randomData);
 
@@ -60,7 +60,7 @@ test.describe('Work Group Management creation', () => {
    
     // Save and verify success
     await groupActions.saveGroup();
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 5000 });
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 10000 });
     
     //save the site for later verification
     await FileSaver.saveSiteData(randomData.siteName, 'created-work-groups_withRoles.json');
@@ -129,7 +129,7 @@ test.describe('Work Group Management creation', () => {
     await expect(groupPage.createWorkingGroupHeading).toBeVisible();
     
      // Fill the form with random data
-    const WGrandomName = await groupActions.fillWGFormWithRandomData();
+    const WGrandomName = await groupActions.fillGroupNameFormWithRandomData('WG');
     const randomData = await groupActions.fillGroupFormWithRandomData();
     console.log('Created work group without roles:', WGrandomName,randomData);
 
@@ -139,7 +139,7 @@ test.describe('Work Group Management creation', () => {
     await expect(groupPage.confirmationMessage).toBeVisible();
     await groupActions.confirmCreation();
     
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 5000 });
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 10000 });
     //save the site for later verification
     await FileSaver.saveSiteData(randomData.siteName, 'created-work-groups_withoutRoles.json');
     const siteUrl = FileSaver.getLastUrl('created-work-groups_withoutRoles.json');

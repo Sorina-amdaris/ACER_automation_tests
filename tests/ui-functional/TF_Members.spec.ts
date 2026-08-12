@@ -264,7 +264,7 @@ test.describe('Edit Task Force members scenarios in TF details page', () => {
     await expect(groupPage.createTaskForceHeading).toBeVisible();
 
     // Fill the form with random data
-    const TFrandomName = await groupActions.fillTFFormWithRandomData();
+    const TFrandomName = await groupActions.fillGroupNameFormWithRandomData('TF');
     const randomData = await groupActions.fillGroupFormWithRandomData();
     console.log('Created task force with roles:', TFrandomName,randomData);
 
