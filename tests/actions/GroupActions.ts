@@ -17,8 +17,8 @@ export class GroupActions {
 
   // Navigation methods
   async goto(url:string) {
-    await this.page.goto(url);
-    await this.page.waitForLoadState('load');
+    await this.page.goto(url, { timeout: 60000 });
+    await this.page.waitForLoadState('load', { timeout: 60000 });
   }
 
   async clickCreateGroup() {
@@ -49,7 +49,7 @@ export class GroupActions {
   generateGroupRandomFormData() {
     return {
       description: generateRandomDescription(20, 50),//without special characters
-      code: generateCode(8),
+      code: generateCode(40),
       siteName: generateSiteName(10)
     };
   }

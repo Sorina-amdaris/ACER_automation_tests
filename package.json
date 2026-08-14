@@ -15,7 +15,10 @@
     "test:debug": "playwright test --debug",
     "report": "playwright show-report",
     "report:api": "playwright show-report",
-    "codegen": "playwright codegen"
+    "codegen": "playwright codegen",
+    "test:ui-functional": "playwright test tests/ui-functional",
+    "test:ui-functional:smoke": "playwright test tests/ui-functional --grep @smoke --headed",
+    "test:ui-functional:headed": "playwright test tests/ui-functional --headed"
   },
   "keywords": [],
   "author": "",

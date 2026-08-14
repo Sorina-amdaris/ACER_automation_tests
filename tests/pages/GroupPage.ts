@@ -93,14 +93,14 @@ export class GroupPage {
   //Member Edit form
   readonly dropdownRoleFieldForSecretariat: Locator;
   readonly memberOptionToSelectInEditMemberForm: Locator;
-  readonly removeChairButtonFromTableViewGrouPage: Locator;
-  readonly removeViceChairButtonFromTableViewGrouPage: Locator;
-  readonly removeSecretariatButtonFromTableViewGrouPage: Locator;
-  readonly removeContractorButtonFromTableViewGrouPage: Locator;
-  readonly removeObserverButtonFromTableViewGrouPage: Locator;
-  readonly removeMemberButtonFromTableViewGrouPage: Locator;
-  readonly removeConvenorButtonFromTableViewGrouPage: Locator;
-  readonly removeExpertButtonFromTableViewGrouPage: Locator;
+  readonly removeChairButtonFromTableViewGroupPage: Locator;
+  readonly removeViceChairButtonFromTableViewGroupPage: Locator;
+  readonly removeSecretariatButtonFromTableViewGroupPage: Locator;
+  readonly removeContractorButtonFromTableViewGroupPage: Locator;
+  readonly removeObserverButtonFromTableViewGroupPage: Locator;
+  readonly removeMemberButtonFromTableViewGroupPage: Locator;
+  readonly removeConvenorButtonFromTableViewGroupPage: Locator;
+  readonly removeExpertButtonFromTableViewGroupPage: Locator;
 
   //user management
   readonly userButton: Locator;
@@ -224,14 +224,14 @@ export class GroupPage {
     //Member Edit form
     this.dropdownRoleFieldForSecretariat = page.getByLabel('Overview').getByText('Secretariat', { exact: true });
     this.memberOptionToSelectInEditMemberForm = page.getByRole('option', { name: 'Member' });
-    this.removeChairButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestChairJulio' }).getByLabel('Remove member');
-    this.removeViceChairButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestViceChairFredrick' }).getByLabel('Remove member');
-    this.removeSecretariatButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestSecretariatBradford' }).getByLabel('Remove member');
-    this.removeContractorButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestContractorMario' }).getByLabel('Remove member');
-    this.removeObserverButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestObserverAlly' }).getByLabel('Remove member');
-    this.removeMemberButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestMemberRamon' }).getByLabel('Remove member');
-    this.removeConvenorButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestConvenorLolita' }).getByLabel('Remove member');
-    this.removeExpertButtonFromTableViewGrouPage = page.getByRole('row', { name: 'TestExpertJacynthe' }).getByLabel('Remove member');
+    this.removeChairButtonFromTableViewGroupPage = page.getByRole('row', { name: 'TestChairJulio' }).getByLabel('Remove member');
+    this.removeViceChairButtonFromTableViewGroupPage = page.getByRole('row', { name: 'TestViceChairFredrick' }).getByLabel('Remove member');
+    this.removeSecretariatButtonFromTableViewGroupPage = page.getByRole('row', { name: 'TestSecretariatBradford' }).getByLabel('Remove member');
+    this.removeContractorButtonFromTableViewGroupPage = page.getByRole('row', { name: 'TestContractorMario' }).getByLabel('Remove member');
+    this.removeObserverButtonFromTableViewGroupPage = page.getByRole('row', { name: 'TestObserverAlly' }).getByLabel('Remove member');
+    this.removeMemberButtonFromTableViewGroupPage = page.getByRole('row', { name: 'TestMemberRamon' }).getByLabel('Remove member');
+    this.removeConvenorButtonFromTableViewGroupPage = page.getByRole('row', { name: 'TestConvenorLolita' }).getByLabel('Remove member');
+    this.removeExpertButtonFromTableViewGroupPage = page.getByRole('row', { name: 'TestExpertJacynthe' }).getByLabel('Remove member');
     
     
     //user management

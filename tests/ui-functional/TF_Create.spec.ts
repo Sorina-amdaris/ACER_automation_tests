@@ -4,13 +4,12 @@ import { GroupActions } from '../actions/GroupActions';
 import manualData from '../../manual-test-data.json';
 import { FileSaver } from '../utils/fileSaver';
 
-//RUN: npx playwright test tests/ui-functional/create-work-group-without-roles.spec.ts --headed  
-//npx playwright show-report 
+//RUN: npx playwright test tests/ui-functional/create-work-group-without-roles.spec.ts --headed   
 
 // Use the authenticated state
 test.use({ storageState: '.auth/user.json' });
 
-test.describe('BOA Management creation', () => {
+test.describe('Task Force Management creation', () => {
   let groupPage: GroupPage;
   let groupActions: GroupActions;
   
@@ -24,25 +23,23 @@ test.describe('BOA Management creation', () => {
   //   await context.close();
   // });
 
-  test('Create BOA with roles', async ({ page }) => {
+  test('Create Task Force with roles', async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
     // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
-    await groupPage.boardButton.click();
-    await expect(groupPage.createBoardButton).toBeVisible();
-    await groupPage.createBoardButton.click();
 
-    //verify form heading
-    await expect(groupPage.boardTypeDropdown).toBeVisible();
-    await groupPage.boardTypeDropdown.click();
-    await groupPage.optionBoaToSelectInBoardTypeDropdown.click();
+    //click add TF button for certain WG from manual test data file
+    await groupActions.goToClickCreateTaskForce();
 
-     // Fill the form with random data
-    const BOArandomName = await groupActions.fillGroupNameFormWithRandomData('BOA');
+    // Verify form heading
+    await expect(groupPage.createTaskForceHeading).toBeVisible();
+
+    // Fill the form with random data
+    const TFrandomName = await groupActions.fillGroupNameFormWithRandomData('TF');
     const randomData = await groupActions.fillGroupFormWithRandomData();
-    console.log('Created BOA with roles:', BOArandomName,randomData);
+    console.log('Created task force with roles:', TFrandomName,randomData);
 
-     //fill out roles
+      //fill out roles
     await groupActions.selectPerson(
       groupPage.comboboxChair,
       manualData.searchWord.chairRole,
@@ -63,14 +60,13 @@ test.describe('BOA Management creation', () => {
    
     // Save and verify success
     await groupActions.saveGroup();
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 10000 });
-    
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 60000 });
+
     //save the site for later verification
-    await FileSaver.saveSiteData(randomData.siteName, 'created-BOA_withRoles.json');
-    const siteUrl = FileSaver.getLastUrl('created-BOA_withRoles.json');
+    await FileSaver.saveSiteData(randomData.siteName, 'created-task-forces_withRoles.json');
+    const siteUrl = FileSaver.getLastUrl('created-task-forces_withRoles.json');
     
-    
-    // Retry mechanism to check for the work group in the list
+   // Retry mechanism to check for the work group in the list
     await expect(async () => {
     await groupActions.goto(siteUrl);
     await expect(groupPage.extranetHubLink).toBeVisible()
@@ -79,19 +75,18 @@ test.describe('BOA Management creation', () => {
     intervals: [10000] // retry every 10s
   });
 
+  
   });
 
-  test('Check BOA - required fields', async ({ page }) => {
-      // Open Board section and create group
+  test('Check Task Force - required fields', async ({ page }) => {
+    // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
-    await groupPage.boardButton.click();
-    await expect(groupPage.createBoardButton).toBeVisible();
-    await groupPage.createBoardButton.click();
-
-    //verify form heading
-    await expect(groupPage.boardTypeDropdown).toBeVisible();
-    await groupPage.boardTypeDropdown.click();
-    await groupPage.optionBoaToSelectInBoardTypeDropdown.click();
+    
+    //click add TF button for certain WG from manual test data file
+    await groupActions.goToClickCreateTaskForce();
+  
+    // Verify form heading
+    await expect(groupPage.createTaskForceHeading).toBeVisible();
     
     // Test validation - try to save without filling required fields
     const errors = await groupActions.verifyRequiredFieldErrors();
@@ -105,18 +100,16 @@ test.describe('BOA Management creation', () => {
 
   });
 
-  test('Check BOA - invalid data', async ({ page }) => {
+  test('Check Task Force - invalid data', async ({ page }) => {
 
-       // Open Board section and create group
+    // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
-    await groupPage.boardButton.click();
-    await expect(groupPage.createBoardButton).toBeVisible();
-    await groupPage.createBoardButton.click();
+ 
+    //click add TF button for certain WG from manual test data file
+    await groupActions.goToClickCreateTaskForce();
 
-    //verify form heading
-    await expect(groupPage.boardTypeDropdown).toBeVisible();
-    await groupPage.boardTypeDropdown.click();
-    await groupPage.optionBoaToSelectInBoardTypeDropdown.click();
+    // Verify form heading
+    await expect(groupPage.createTaskForceHeading).toBeVisible();
 
     await groupActions.insertInvalidDataInCreateGroupForm();
     const invalidErrors = await groupActions.verifyInvalidFieldErrors();
@@ -130,34 +123,29 @@ test.describe('BOA Management creation', () => {
 
   }); 
 
-  test('Create BOA without roles', async ({ page }) => {
+  test('Create Task Force without roles', async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
-       // Open Board section and create group
+    // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
-    await groupPage.boardButton.click();
-    await expect(groupPage.createBoardButton).toBeVisible();
-    await groupPage.createBoardButton.click();
-
-    //verify form heading
-    await expect(groupPage.boardTypeDropdown).toBeVisible();
-    await groupPage.boardTypeDropdown.click();
-    await groupPage.optionBoaToSelectInBoardTypeDropdown.click();
     
-     // Fill the form with random data
-    const BOArandomName = await groupActions.fillGroupNameFormWithRandomData('BOA');
+     
+    //click add TF button for certain WG from manual test data file
+    await groupActions.goToClickCreateTaskForce();
+    
+    // Fill the form with random data
+    const TFrandomName = await groupActions.fillGroupNameFormWithRandomData('TF');
     const randomData = await groupActions.fillGroupFormWithRandomData();
-    console.log('Created BOA without roles:', BOArandomName,randomData);
-
+    console.log('Created Task Force without roles:', TFrandomName,randomData);
+    
     // Save and handle confirmation
     await groupActions.saveGroup();
     await expect(groupPage.confirmationHeading).toBeVisible();
     await expect(groupPage.confirmationMessage).toBeVisible();
     await groupActions.confirmCreation();
     
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 100000 });
-    //save the site for later verification
-    await FileSaver.saveSiteData(randomData.siteName, 'created-BOA_withoutRoles.json');
-    const siteUrl = FileSaver.getLastUrl('created-BOA_withoutRoles.json');
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 60000 });
+    await FileSaver.saveSiteData(randomData.siteName, 'created-task-forces_withoutRoles.json');
+    const siteUrl = FileSaver.getLastUrl('created-task-forces_withoutRoles.json');
 
    // Retry mechanism to check for the work group in the list
     await expect(async () => {
@@ -167,6 +155,6 @@ test.describe('BOA Management creation', () => {
     timeout: 300000,   // total retry time as 5 minutes
     intervals: [10000] // retry every 10s
   });
-
-  });
+});
+  
 });

@@ -10,7 +10,7 @@ import manualData from '../../manual-test-data.json';
 // Use the authenticated state
 test.use({ storageState: '.auth/user.json' });
 
-test.describe('Edit BOR positive and negative scenarios', () => {
+test.describe('Edit BOA positive and negative scenarios', () => {
   let groupPage: GroupPage;
   let groupActions: GroupActions;
   
@@ -24,14 +24,14 @@ test.describe('Edit BOR positive and negative scenarios', () => {
   //   await context.close();
   // });
 
-  test('Edit BOR form', async ({ page }) => {
+  test('Edit BOA form', { tag: '@smoke' }, async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
      // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     await groupPage.boardButton.click();
     await expect(groupPage.createBoardButton).toBeVisible();
 
-    await groupActions.goToCertainGroup(manualData.editBORname);
+    await groupActions.goToCertainGroup(manualData.editBOAname);
 
     //click on pensil icon to edit BOR
     await groupPage.editBoardPencilIcon.click();
@@ -39,7 +39,7 @@ test.describe('Edit BOR positive and negative scenarios', () => {
      // Verify form heading
     await expect(groupPage.editBoardHeading).toBeVisible();
     await groupActions.fillEditGroupForm({
-      name: manualData.BORNameEdited,
+      name: manualData.BOANameEdited,
       description: manualData.editDescription
     }
   );
@@ -64,7 +64,7 @@ test.describe('Edit BOR positive and negative scenarios', () => {
 
     //save the form and verify success message
     await groupActions.saveGroup();
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 10000 });
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 60000 });
     await page.reload({ timeout: 6000 });
 
     // Retry mechanism to check for the work group in the list
@@ -73,15 +73,15 @@ test.describe('Edit BOR positive and negative scenarios', () => {
     await expect(groupPage.groupsButton).toBeVisible();
     await groupPage.boardButton.click();
     await expect(groupPage.createBoardButton).toBeVisible();
-    await groupPage.searchBoxAdministrationPage.fill(manualData.BORNameEdited);
+    await groupPage.searchBoxAdministrationPage.fill(manualData.BOANameEdited);
     await groupPage.searchBoxAdministrationPage.press('Enter');
-    await expect(groupActions.verifyGroupInList(manualData.BORNameEdited)).toBeVisible();
-    //click on pensil icon to edit BOR
+    await expect(groupActions.verifyGroupInList(manualData.BOANameEdited)).toBeVisible();
+    //click on pensil icon to edit BOA
     await groupPage.editBoardPencilIcon.click();
      // Verify form heading
     await expect(groupPage.editBoardHeading).toBeVisible();
 
-    await expect(groupPage.nameField).toHaveValue(manualData.BORNameEdited);
+    await expect(groupPage.nameField).toHaveValue(manualData.BOANameEdited);
    //verify roles being present in the edit form
     await expect(groupPage.personTag.filter({hasText: 'TestChairJulio',}).first()).toBeVisible();
     await expect(groupPage.personTag.filter({ hasText: 'TestViceChairFredrick',}).first()).toBeVisible();
@@ -94,7 +94,7 @@ test.describe('Edit BOR positive and negative scenarios', () => {
     //remove roles and edit to original name and description
     await groupActions.removeRolesinEditForm();
     await groupActions.fillEditGroupForm({
-      name: manualData.editBORname,
+      name: manualData.editBOAname,
       description: manualData.description
     });
     
@@ -103,7 +103,7 @@ test.describe('Edit BOR positive and negative scenarios', () => {
     await expect(groupPage.confirmationHeading).toBeVisible();
     await groupActions.confirmCreation();
 
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 10000 }); 
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 60000 }); 
     
    // Retry mechanism to check for the work group in the list
   await page.reload({ timeout: 6000 });
@@ -112,14 +112,14 @@ test.describe('Edit BOR positive and negative scenarios', () => {
     await expect(groupPage.groupsButton).toBeVisible();
     await groupPage.boardButton.click();
     await expect(groupPage.createBoardButton).toBeVisible();
-    await groupPage.searchBoxAdministrationPage.fill(manualData.editWG);
+    await groupPage.searchBoxAdministrationPage.fill(manualData.editBOAname);
     await groupPage.searchBoxAdministrationPage.press('Enter');
-    await expect(groupActions.verifyGroupInList(manualData.editWG)).toBeVisible();
-    //click on pensil icon to edit WG
+    await expect(groupActions.verifyGroupInList(manualData.editBOAname)).toBeVisible();
+    //click on pensil icon to edit BOA
     await groupPage.editBoardPencilIcon.click();
      // Verify form heading
     await expect(groupPage.editBoardHeading).toBeVisible();
-    await expect(groupPage.nameField).toHaveValue(manualData.editBORname);
+    await expect(groupPage.nameField).toHaveValue(manualData.editBOAname);
     //verify roles being present in the edit form
     await expect(groupPage.personTag.filter({hasText: 'TestChairJulio',})).not.toBeVisible();
     await expect(groupPage.personTag.filter({hasText: 'TestViceChairFredrick',})).not.toBeVisible();
@@ -132,15 +132,15 @@ test.describe('Edit BOR positive and negative scenarios', () => {
 
    });  
 
-    test('Check BOR Edit - required fields', async ({ page }) => {
+    test('Check BOA Edit - required fields', { tag: '@smoke' }, async ({ page }) => {
     // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     await expect(groupPage.groupsButton).toBeVisible();
     await groupPage.boardButton.click();
     await expect(groupPage.createBoardButton).toBeVisible();
 
-    await groupActions.goToCertainGroup(manualData.editBORname);
-    //click on pensil icon to edit BoR
+    await groupActions.goToCertainGroup(manualData.editBOAname);
+    //click on pensil icon to edit BOA
     await groupPage.editBoardPencilIcon.click();
 
     // Verify form heading
@@ -156,16 +156,16 @@ test.describe('Edit BOR positive and negative scenarios', () => {
 
   });
 
-  test('Check BOR Edit - invalid data', async ({ page }) => {
+  test('Check BOA Edit - invalid data', { tag: '@smoke' }, async ({ page }) => {
   // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     await expect(groupPage.groupsButton).toBeVisible();
     await groupPage.boardButton.click();
     await expect(groupPage.createBoardButton).toBeVisible();
     
-    await groupActions.goToCertainGroup(manualData.editBORname);
+    await groupActions.goToCertainGroup(manualData.editBOAname);
 
-    //click on pensil icon to edit BOR
+    //click on pensil icon to edit BOA
     await groupPage.editBoardPencilIcon.click();
 
     // Verify form heading

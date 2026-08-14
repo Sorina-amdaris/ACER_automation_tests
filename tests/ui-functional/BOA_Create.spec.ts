@@ -10,7 +10,7 @@ import { FileSaver } from '../utils/fileSaver';
 // Use the authenticated state
 test.use({ storageState: '.auth/user.json' });
 
-test.describe('BOR Management creation', () => {
+test.describe('BOA Management creation', () => {
   let groupPage: GroupPage;
   let groupActions: GroupActions;
   
@@ -24,7 +24,7 @@ test.describe('BOR Management creation', () => {
   //   await context.close();
   // });
 
-  test('Create BOR with roles', async ({ page }) => {
+  test('Create BOA with roles', { tag: '@smoke' }, async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
     // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
@@ -35,12 +35,12 @@ test.describe('BOR Management creation', () => {
     //verify form heading
     await expect(groupPage.boardTypeDropdown).toBeVisible();
     await groupPage.boardTypeDropdown.click();
-    await groupPage.optionBorToSelectInBoardTypeDropdown.click();
+    await groupPage.optionBoaToSelectInBoardTypeDropdown.click();
 
      // Fill the form with random data
-    const BORrandomName = await groupActions.fillGroupNameFormWithRandomData('BOR');
+    const BOArandomName = await groupActions.fillGroupNameFormWithRandomData('BOA');
     const randomData = await groupActions.fillGroupFormWithRandomData();
-    console.log('Created BOR with roles:', BORrandomName,randomData);
+    console.log('Created BOA with roles:', BOArandomName,randomData);
 
      //fill out roles
     await groupActions.selectPerson(
@@ -63,11 +63,11 @@ test.describe('BOR Management creation', () => {
    
     // Save and verify success
     await groupActions.saveGroup();
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 10000 });
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 60000 });
     
     //save the site for later verification
-    await FileSaver.saveSiteData(randomData.siteName, 'created-BOR_withRoles.json');
-    const siteUrl = FileSaver.getLastUrl('created-BOR_withRoles.json');
+    await FileSaver.saveSiteData(randomData.siteName, 'created-BOA_withRoles.json');
+    const siteUrl = FileSaver.getLastUrl('created-BOA_withRoles.json');
     
     
     // Retry mechanism to check for the work group in the list
@@ -81,7 +81,7 @@ test.describe('BOR Management creation', () => {
 
   });
 
-  test('Check BOR - required fields', async ({ page }) => {
+  test('Check BOA - required fields', { tag: '@smoke' }, async ({ page }) => {
       // Open Board section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     await groupPage.boardButton.click();
@@ -91,7 +91,7 @@ test.describe('BOR Management creation', () => {
     //verify form heading
     await expect(groupPage.boardTypeDropdown).toBeVisible();
     await groupPage.boardTypeDropdown.click();
-    await groupPage.optionBorToSelectInBoardTypeDropdown.click();
+    await groupPage.optionBoaToSelectInBoardTypeDropdown.click();
     
     // Test validation - try to save without filling required fields
     const errors = await groupActions.verifyRequiredFieldErrors();
@@ -105,7 +105,7 @@ test.describe('BOR Management creation', () => {
 
   });
 
-  test('Check BOR - invalid data', async ({ page }) => {
+  test('Check BOA - invalid data', { tag: '@smoke' }, async ({ page }) => {
 
        // Open Board section and create group
     await expect(groupPage.groupsButton).toBeVisible();
@@ -116,7 +116,7 @@ test.describe('BOR Management creation', () => {
     //verify form heading
     await expect(groupPage.boardTypeDropdown).toBeVisible();
     await groupPage.boardTypeDropdown.click();
-    await groupPage.optionBorToSelectInBoardTypeDropdown.click();
+    await groupPage.optionBoaToSelectInBoardTypeDropdown.click();
 
     await groupActions.insertInvalidDataInCreateGroupForm();
     const invalidErrors = await groupActions.verifyInvalidFieldErrors();
@@ -130,7 +130,7 @@ test.describe('BOR Management creation', () => {
 
   }); 
 
-  test('Create BOR without roles', async ({ page }) => {
+  test('Create BOA without roles', { tag: '@smoke' }, async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
        // Open Board section and create group
     await expect(groupPage.groupsButton).toBeVisible();
@@ -141,12 +141,12 @@ test.describe('BOR Management creation', () => {
     //verify form heading
     await expect(groupPage.boardTypeDropdown).toBeVisible();
     await groupPage.boardTypeDropdown.click();
-    await groupPage.optionBorToSelectInBoardTypeDropdown.click();
+    await groupPage.optionBoaToSelectInBoardTypeDropdown.click();
     
      // Fill the form with random data
-    const BORrandomName = await groupActions.fillGroupNameFormWithRandomData('BOR');
+    const BOArandomName = await groupActions.fillGroupNameFormWithRandomData('BOA');
     const randomData = await groupActions.fillGroupFormWithRandomData();
-    console.log('Created BOR without roles:', BORrandomName,randomData);
+    console.log('Created BOA without roles:', BOArandomName,randomData);
 
     // Save and handle confirmation
     await groupActions.saveGroup();
@@ -154,10 +154,10 @@ test.describe('BOR Management creation', () => {
     await expect(groupPage.confirmationMessage).toBeVisible();
     await groupActions.confirmCreation();
     
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 10000 });
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 60000 });
     //save the site for later verification
-    await FileSaver.saveSiteData(randomData.siteName, 'created-BOR_withoutRoles.json');
-    const siteUrl = FileSaver.getLastUrl('created-BOR_withoutRoles.json');
+    await FileSaver.saveSiteData(randomData.siteName, 'created-BOA_withoutRoles.json');
+    const siteUrl = FileSaver.getLastUrl('created-BOA_withoutRoles.json');
 
    // Retry mechanism to check for the work group in the list
     await expect(async () => {

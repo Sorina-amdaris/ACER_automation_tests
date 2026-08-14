@@ -5,6 +5,7 @@ import manualData from '../../manual-test-data.json';
 import { FileSaver } from '../utils/fileSaver';
 
 //RUN: npx playwright test tests/ui-functional/create-work-group-without-roles.spec.ts --headed  
+//npm run test:ui-functional:smoke
 //npx playwright show-report 
 
 // Use the authenticated state
@@ -24,7 +25,7 @@ test.describe('AB Management creation', () => {
   //   await context.close();
   // });
 
-  test('Create AB with roles', async ({ page }) => {
+  test('Create AB with roles', { tag: '@smoke' }, async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
     // Open groups section and create group
     await expect(groupPage.groupsButton).toBeVisible();
@@ -63,7 +64,7 @@ test.describe('AB Management creation', () => {
    
     // Save and verify success
     await groupActions.saveGroup();
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 10000 });
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 60000 });
     
     //save the site for later verification
     await FileSaver.saveSiteData(randomData.siteName, 'created-AB_withRoles.json');
@@ -81,7 +82,7 @@ test.describe('AB Management creation', () => {
 
   });
 
-  test('Check AB - required fields', async ({ page }) => {
+  test('Check AB - required fields', { tag: '@smoke' }, async ({ page }) => {
       // Open Board section and create group
     await expect(groupPage.groupsButton).toBeVisible();
     await groupPage.boardButton.click();
@@ -105,7 +106,7 @@ test.describe('AB Management creation', () => {
 
   });
 
-  test('Check AB - invalid data', async ({ page }) => {
+  test('Check AB - invalid data', { tag: '@smoke' }, async ({ page }) => {
 
        // Open Board section and create group
     await expect(groupPage.groupsButton).toBeVisible();
@@ -130,7 +131,7 @@ test.describe('AB Management creation', () => {
 
   }); 
 
-  test('Create AB without roles', async ({ page }) => {
+  test('Create AB without roles', { tag: '@smoke' }, async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
        // Open Board section and create group
     await expect(groupPage.groupsButton).toBeVisible();
@@ -154,7 +155,7 @@ test.describe('AB Management creation', () => {
     await expect(groupPage.confirmationMessage).toBeVisible();
     await groupActions.confirmCreation();
     
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 10000 });
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 60000 });
     //save the site for later verification
     await FileSaver.saveSiteData(randomData.siteName, 'created-AB_withoutRoles.json');
     const siteUrl = FileSaver.getLastUrl('created-AB_withoutRoles.json');

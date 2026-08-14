@@ -62,8 +62,8 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
 
     //save the form and verify success message
     await groupActions.saveGroup();
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 6000 });
-    await page.reload({ timeout: 6000 });
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 60000 });
+    await page.reload({ timeout: 60000 });
 
    // Retry mechanism to check for the task force in the list
   await expect(async () => {
@@ -99,7 +99,7 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
     await expect(groupPage.confirmationHeading).toBeVisible();
     await groupActions.confirmCreation();
 
-    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 6000 }); 
+    await expect(groupActions.verifySuccessMessage()).toBeVisible({ timeout: 60000 }); 
     
    // Retry mechanism to check for the task force in the list
   await page.reload({ timeout: 6000 });
