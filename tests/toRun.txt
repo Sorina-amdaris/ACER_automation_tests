@@ -1,7 +1,8 @@
 
-Test data need to be clean with no roles from manual-test_data.json file
+Test data need to be clean with no roles from manual-test_data.json file, the urls, as the title is same for url test data
 There is script to clean the test data: Prepare_Test_Data.spec.ts file
 
 Tag is placed into tests as smoke
 RUN Command: npm run test:ui-functional:smoke
 
+Report: in Terminal : npx playwright show-report

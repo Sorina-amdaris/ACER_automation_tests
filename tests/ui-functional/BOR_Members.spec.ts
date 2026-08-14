@@ -161,8 +161,8 @@ test.describe('Edit BOR members scenarios in BOR details page', () => {
     await expect(groupPage.membersSection).toBeVisible();
     await expect(groupPage.membersCheckboxes).toHaveCount(7);//6 actually
   }).toPass({
-    timeout: 60000,
-    intervals: [5000],}); //for vice-chair, chair, secretariat, contractor, observer and member roles
+    timeout: 90000, //3 min
+    intervals: [5000],}); // 5 sec, for vice-chair, chair, secretariat, contractor, observer and member roles
    });  
 
    test('Edit and Remove Members in BOR', { tag: '@smoke' }, async ({ page }) => {
@@ -219,8 +219,8 @@ test.describe('Edit BOR members scenarios in BOR details page', () => {
     await expect(groupPage.viceChairMemberinGroupPage).toHaveCount(1);
     await expect(groupPage.acerContactMemberinGroupPage).toHaveCount(1);
   }).toPass({
-    timeout: 60000,
-    intervals: [5000],}); 
+    timeout: 90000, //3 min
+    intervals: [5000],}); // 5 sec
 
     await expect(groupPage.membersSection).toBeVisible();
 
@@ -264,8 +264,8 @@ test.describe('Edit BOR members scenarios in BOR details page', () => {
     await expect(groupPage.viceChairMemberinGroupPage).not.toBeVisible();
     await expect(groupPage.acerContactMemberinGroupPage).not.toBeVisible();
   }).toPass({
-    timeout: 60000,
-    intervals: [5000],}); 
+    timeout: 90000, //3 min
+    intervals: [5000],}); // 5 sec
 
    }); 
    

@@ -30,179 +30,48 @@ test.describe('Remove all members from test data groups', () => {
     groupActions = new GroupActions(page);
   });
 
-  // test.afterEach(async ({ context }) => {
-  //   await context.close();
-  // });
-test('Remove roles from addMembersInWG_URL', async ({ page }) => {
-    test.setTimeout(10 * 60 * 1000); // 10 minutes
-    // Go to test data groups
-    await groupActions.goto(manualData.addMembersInWG_URL);
-    await expect(groupPage.membersSection).toBeVisible();
- 
-    await groupPage.tableView.click();
+  test.afterEach(async ({ context }) => {
+    await context.close();
+  });
 
-    //remove each role only if it is present, otherwise skip it
-    await removeRoleIfVisible(groupPage, groupPage.removeChairButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeViceChairButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeSecretariatButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeContractorButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeObserverButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeMemberButtonFromTableViewGroupPage, true);
+  for (const [urlKey, url] of Object.entries(manualData.entityURL)) {
+    test(`Remove roles from ${urlKey}`, async ({ page }) => {
+      test.setTimeout(10 * 60 * 1000); // 10 minutes
+      // Go to test data group
+      await groupActions.goto(url);
+      await expect(groupPage.membersSection).toBeVisible();
 
-    //Wait for the data to be persisted before reloading
-    await page.waitForTimeout(2000);
-    //Reload the page to verify the removed member to be not present in the list
-    await page.reload({ timeout: 6000 });
-   
-    //check Key People section assertion after removing members
-    await page.reload({ timeout: 6000 });
-    await expect(async () => {
-    await page.reload({ timeout: 6000 });
-    await expect(groupPage.keyPeopleSection).not.toBeVisible();
-    await expect(groupPage.chairMemberinGroupPage).not.toBeVisible();
-    await expect(groupPage.viceChairMemberinGroupPage).not.toBeVisible();
-    await expect(groupPage.acerContactMemberinGroupPage).not.toBeVisible();
-  }).toPass({
-    timeout: 60000,
-    intervals: [5000],}); 
-   }); 
+      await groupPage.tableView.click();
 
-test('Remove roles from editAndRemoveMembersInWG_URL', async ({ page }) => {
-    test.setTimeout(10 * 60 * 1000); // 10 minutes
-    // Go to test data groups
-    await groupActions.goto(manualData.editAndRemoveMembersInWG_URL);
-    await expect(groupPage.membersSection).toBeVisible();
- 
-    await groupPage.tableView.click();
+      //remove each role only if it is present, otherwise skip it (safe no-op for roles the group type doesn't have)
+      await removeRoleIfVisible(groupPage, groupPage.removeChairButtonFromTableViewGroupPage, true);
+      await removeRoleIfVisible(groupPage, groupPage.removeViceChairButtonFromTableViewGroupPage, true);
+      await removeRoleIfVisible(groupPage, groupPage.removeSecretariatButtonFromTableViewGroupPage, true);
+      await removeRoleIfVisible(groupPage, groupPage.removeContractorButtonFromTableViewGroupPage, true);
+      await removeRoleIfVisible(groupPage, groupPage.removeObserverButtonFromTableViewGroupPage, true);
+      await removeRoleIfVisible(groupPage, groupPage.removeMemberButtonFromTableViewGroupPage, true);
+      await removeRoleIfVisible(groupPage, groupPage.removeConvenorButtonFromTableViewGroupPage, true);
+      await removeRoleIfVisible(groupPage, groupPage.removeExpertButtonFromTableViewGroupPage, true);
 
-    //remove each role only if it is present, otherwise skip it
-    await removeRoleIfVisible(groupPage, groupPage.removeChairButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeViceChairButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeSecretariatButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeContractorButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeObserverButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeMemberButtonFromTableViewGroupPage, true);
+      //Wait for the data to be persisted before reloading
+      await page.waitForTimeout(2000);
+      //Reload the page to verify the removed member to be not present in the list
+      await page.reload({ timeout: 6000 });
 
-    //Wait for the data to be persisted before reloading
-    await page.waitForTimeout(2000);
-    //Reload the page to verify the removed member to be not present in the list
-    await page.reload({ timeout: 6000 });
-   
-    //check Key People section assertion after removing members
-    await page.reload({ timeout: 6000 });
-    await expect(async () => {
-    await page.reload({ timeout: 6000 });
-    await expect(groupPage.keyPeopleSection).not.toBeVisible();
-    await expect(groupPage.chairMemberinGroupPage).not.toBeVisible();
-    await expect(groupPage.viceChairMemberinGroupPage).not.toBeVisible();
-    await expect(groupPage.acerContactMemberinGroupPage).not.toBeVisible();
-  }).toPass({
-    timeout: 60000,
-    intervals: [5000],}); 
-   }); 
-test('Remove roles from addMembersInTF_URL', async ({ page }) => {
-    test.setTimeout(10 * 60 * 1000); // 10 minutes
-    // Go to test data groups
-    await groupActions.goto(manualData.addMembersInTF_URL);
-    await expect(groupPage.membersSection).toBeVisible();
- 
-    await groupPage.tableView.click();
+      //check Key People section assertion after removing members
+      await page.reload({ timeout: 6000 });
+      await expect(async () => {
+      await page.reload({ timeout: 6000 });
+      await expect(groupPage.keyPeopleSection).not.toBeVisible();
+      await expect(groupPage.chairMemberinGroupPage).not.toBeVisible();
+      await expect(groupPage.viceChairMemberinGroupPage).not.toBeVisible();
+      await expect(groupPage.acerContactMemberinGroupPage).not.toBeVisible();
+      }).toPass({
+        timeout: 60000,
+        intervals: [5000],
+      });
+    });
+  }
 
-    //remove each role only if it is present, otherwise skip it
-    await removeRoleIfVisible(groupPage, groupPage.removeChairButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeViceChairButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeSecretariatButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeContractorButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeObserverButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeMemberButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeConvenorButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeExpertButtonFromTableViewGroupPage, true);
 
-    //Wait for the data to be persisted before reloading
-    await page.waitForTimeout(2000);
-    //Reload the page to verify the removed member to be not present in the list
-    await page.reload({ timeout: 6000 });
-   
-    //check Key People section assertion after removing members
-    await page.reload({ timeout: 6000 });
-    await expect(async () => {
-    await page.reload({ timeout: 6000 });
-    await expect(groupPage.keyPeopleSection).not.toBeVisible();
-    await expect(groupPage.chairMemberinGroupPage).not.toBeVisible();
-    await expect(groupPage.viceChairMemberinGroupPage).not.toBeVisible();
-    await expect(groupPage.acerContactMemberinGroupPage).not.toBeVisible();
-  }).toPass({
-    timeout: 60000,
-    intervals: [5000],}); 
-   }); 
-
-test('Remove roles from editAndRemoveMembersInTF_URL', async ({ page }) => {
-    test.setTimeout(10 * 60 * 1000); // 10 minutes
-    // Go to test data groups
-    await groupActions.goto(manualData.editAndRemoveMembersInTF_URL);
-    await expect(groupPage.membersSection).toBeVisible();
- 
-    await groupPage.tableView.click();
-
-    //remove each role only if it is present, otherwise skip it
-    await removeRoleIfVisible(groupPage, groupPage.removeChairButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeViceChairButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeSecretariatButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeContractorButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeObserverButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeMemberButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeConvenorButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeExpertButtonFromTableViewGroupPage, true);
-
-    //Wait for the data to be persisted before reloading
-    await page.waitForTimeout(2000);
-    //Reload the page to verify the removed member to be not present in the list
-    await page.reload({ timeout: 6000 });
-   
-    //check Key People section assertion after removing members
-    await page.reload({ timeout: 6000 });
-    await expect(async () => {
-    await page.reload({ timeout: 6000 });
-    await expect(groupPage.keyPeopleSection).not.toBeVisible();
-    await expect(groupPage.chairMemberinGroupPage).not.toBeVisible();
-    await expect(groupPage.viceChairMemberinGroupPage).not.toBeVisible();
-    await expect(groupPage.acerContactMemberinGroupPage).not.toBeVisible();
-  }).toPass({
-    timeout: 60000,
-    intervals: [5000],}); 
-   });    
-
-   test('Remove roles from addmembersInBOR_URL', async ({ page }) => {
-    test.setTimeout(10 * 60 * 1000); // 10 minutes
-    // Go to test data groups
-    await groupActions.goto(manualData.addmembersInBOR_URL);
-    await expect(groupPage.membersSection).toBeVisible();
- 
-    await groupPage.tableView.click();
-
-    //remove each role only if it is present, otherwise skip it
-    await removeRoleIfVisible(groupPage, groupPage.removeChairButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeViceChairButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeSecretariatButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeContractorButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeObserverButtonFromTableViewGroupPage, true);
-    await removeRoleIfVisible(groupPage, groupPage.removeMemberButtonFromTableViewGroupPage, true);
-
-    //Wait for the data to be persisted before reloading
-    await page.waitForTimeout(2000);
-    //Reload the page to verify the removed member to be not present in the list
-    await page.reload({ timeout: 6000 });
-   
-    //check Key People section assertion after removing members
-    await page.reload({ timeout: 6000 });
-    await expect(async () => {
-    await page.reload({ timeout: 6000 });
-    await expect(groupPage.keyPeopleSection).not.toBeVisible();
-    await expect(groupPage.chairMemberinGroupPage).not.toBeVisible();
-    await expect(groupPage.viceChairMemberinGroupPage).not.toBeVisible();
-    await expect(groupPage.acerContactMemberinGroupPage).not.toBeVisible();
-  }).toPass({
-    timeout: 60000,
-    intervals: [5000],}); 
-   });    
 });

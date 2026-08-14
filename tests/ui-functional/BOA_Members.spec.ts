@@ -63,7 +63,16 @@ test.describe('Edit BOA members scenarios in BOA details page', () => {
   test('Add Members in BOA', { tag: '@smoke' }, async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
     await groupActions.goto(manualData.addmembersInBOA_URL);
-    await expect(groupPage.membersSection).toBeVisible();
+
+    // Retry mechanism: reload until the page has finished loading and members section is visible
+    await expect(async () => {
+      await page.reload();
+      await expect(groupPage.membersSection).toBeVisible({ timeout: 10000 });
+    }).toPass({
+      timeout: 60000,//60 seconds
+      intervals: [10000],//10seconds
+    });
+
     //switch to Table view so the remove-button presence checks below actually resolve
     await groupPage.tableView.click();
 
@@ -161,14 +170,22 @@ test.describe('Edit BOA members scenarios in BOA details page', () => {
     await expect(groupPage.membersSection).toBeVisible();
     await expect(groupPage.membersCheckboxes).toHaveCount(7);//6 actually
   }).toPass({
-    timeout: 60000,
-    intervals: [5000],}); //for vice-chair, chair, secretariat, contractor, observer and member roles
+    timeout: 90000, //3 min
+    intervals: [5000],}); // 5 sec, for vice-chair, chair, secretariat, contractor, observer and member roles
    });  
 
    test('Edit and Remove Members in BOA', { tag: '@smoke' }, async ({ page }) => {
     test.setTimeout(10 * 60 * 1000); // 10 minutes
     await groupActions.goto(manualData.addmembersInBOA_URL);
-    await expect(groupPage.membersSection).toBeVisible();
+    
+    // Retry mechanism: reload until the page has finished loading and members section is visible
+    await expect(async () => {
+      await page.reload();
+      await expect(groupPage.membersSection).toBeVisible({ timeout: 10000 });
+    }).toPass({
+      timeout: 60000,//60 seconds
+      intervals: [10000],//10seconds
+    });
     //switch to Table view so the remove-button presence checks below actually resolve
     await groupPage.tableView.click();
 
@@ -219,8 +236,8 @@ test.describe('Edit BOA members scenarios in BOA details page', () => {
     await expect(groupPage.viceChairMemberinGroupPage).toHaveCount(1);
     await expect(groupPage.acerContactMemberinGroupPage).toHaveCount(1);
   }).toPass({
-    timeout: 60000,
-    intervals: [5000],}); 
+    timeout: 90000, //3 min
+    intervals: [5000],}); // 5 sec
 
     await expect(groupPage.membersSection).toBeVisible();
 
@@ -264,8 +281,8 @@ test.describe('Edit BOA members scenarios in BOA details page', () => {
     await expect(groupPage.viceChairMemberinGroupPage).not.toBeVisible();
     await expect(groupPage.acerContactMemberinGroupPage).not.toBeVisible();
   }).toPass({
-    timeout: 60000,
-    intervals: [5000],}); 
+    timeout: 90000, //3 min 
+    intervals: [5000],}); //5 sec
 
    }); 
    

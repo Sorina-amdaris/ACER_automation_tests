@@ -36,7 +36,7 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
      // Verify form heading
     await expect(groupPage.editWorkingGroupHeading).toBeVisible();
     await groupActions.fillEditGroupForm({
-      name: manualData.editName,
+      name: manualData.editWGname,
       description: manualData.editDescription
     }
   );
@@ -67,15 +67,15 @@ test.describe('Edit Work Group positive and negative scenarios', () => {
     // Retry mechanism to check for the work group in the list
     await expect(async () => {
     await page.reload();
-    await groupPage.searchBoxAdministrationPage.fill(manualData.editName);
+    await groupPage.searchBoxAdministrationPage.fill(manualData.editWGname);
     await groupPage.searchBoxAdministrationPage.press('Enter');
-    await expect(groupActions.verifyGroupInList(manualData.editName)).toBeVisible();
+    await expect(groupActions.verifyGroupInList(manualData.editWGname)).toBeVisible();
     //click on pensil icon to edit WG
     await groupPage.editWorkingGroupButton.click();
      // Verify form heading
     await expect(groupPage.editWorkingGroupHeading).toBeVisible();
 
-    await expect(groupPage.nameField).toHaveValue(manualData.editName);
+    await expect(groupPage.nameField).toHaveValue(manualData.editWGname);
    //verify roles being present in the edit form
     await expect(groupPage.personTag.filter({hasText: 'TestChairJulio',}).first()).toBeVisible();
     await expect(groupPage.personTag.filter({ hasText: 'TestViceChairFredrick',}).first()).toBeVisible();

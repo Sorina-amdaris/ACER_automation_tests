@@ -37,7 +37,7 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
      // Verify form heading
     await expect(groupPage.editTaskForceHeading).toBeVisible();
     await groupActions.fillEditGroupForm({
-      name: manualData.editName,
+      name: manualData.editTFname,
       description: manualData.editDescription
     }
   );
@@ -68,15 +68,15 @@ test.describe('Edit Task Force positive and negative scenarios', () => {
    // Retry mechanism to check for the task force in the list
   await expect(async () => {
     await page.reload();
-    await groupPage.searchBoxAdministrationPage.fill(manualData.editName);
+    await groupPage.searchBoxAdministrationPage.fill(manualData.editTFname);
     await groupPage.searchBoxAdministrationPage.press('Enter');
-    await expect(groupActions.verifyGroupInList(manualData.editName)).toBeVisible();
+    await expect(groupActions.verifyGroupInList(manualData.editTFname)).toBeVisible();
     //click on pensil icon to edit TF
     await groupPage.editTaskForceButton.click();
      // Verify form heading
     await expect(groupPage.editTaskForceHeading).toBeVisible();
 
-    await expect(groupPage.nameField).toHaveValue(manualData.editName);
+    await expect(groupPage.nameField).toHaveValue(manualData.editTFname);
    //verify roles being present in the edit form
     await expect(groupPage.personTag.filter({hasText: 'TestChairJulio',}).first()).toBeVisible();
     await expect(groupPage.personTag.filter({ hasText: 'TestViceChairFredrick',}).first()).toBeVisible();
